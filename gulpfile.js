@@ -78,7 +78,7 @@ gulp.task('static', function () {
 // Html
 gulp.task('html', function () {
     return gulp.src('*.html')
-        .pipe(replace('dist/', ''))
+        .pipe(replace(/dist\/(?=styles.*?">|scripts.*?"><\/script>)/g, ''))
         .pipe(htmlmin({
             removeComments: true,
             collapseWhitespace: true,

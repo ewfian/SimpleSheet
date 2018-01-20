@@ -8,14 +8,14 @@ function Element(tagName, props, children) {
         return new Element(tagName, props, children);
     }
 
-    if (_.isArray(props)) {
+    if (!_.isObject(props) || _.isArray(props)) {
         children = props;
         props = {};
     }
 
     this.tagName = tagName;
     this.props = props || {};
-    this.children = _.isArray(children) ? children : new Array(children || []);
+    this.children = _.isArray(children) ? children : [].concat(children || []);
 }
 
 Element.prototype.render = function () {

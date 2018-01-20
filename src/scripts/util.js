@@ -5,23 +5,21 @@ var _ = {};
 _.type = function (obj) {
     return Object.prototype.toString.call(obj).replace(/\[object\s|\]/g, '');
 };
-_.isArray = function isArray(list) {
-    return _.type(list) === 'Array';
-};
 _.slice = function slice(arrayLike, index) {
     return Array.prototype.slice.call(arrayLike, index);
 };
 _.truthy = function truthy(value) {
     return !!value;
 };
-_.isString = function isString(list) {
-    return _.type(list) === 'String';
+_.isArray = function isArray(object) {
+    return _.type(object) === 'Array';
 };
-
-_.isNumeric = function (value) {
-    return !isNaN(parseFloat(value)) && isFinite(value);
+_.isString = function isString(object) {
+    return _.type(object) === 'String';
 };
-
+_.isNumeric = function (object) {
+    return !isNaN(parseFloat(object)) && isFinite(object);
+};
 _.isObject = function (object) {
     return object && typeof object == 'object' &&
         (object == window || object instanceof Object);

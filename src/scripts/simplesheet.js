@@ -37,7 +37,12 @@ var SimpleSheet = function (query) {
         },
         height: 10,
         width: 20
-    }, [456, e0, e1]);
+    }, [456, e0, new Element('button', 5), new Element('button', {
+        style: {
+            'font-size': '20pt'
+        }
+    }, 6)]);
+
 
     this.container.appendChild(e2.render());
     console.log(e2);

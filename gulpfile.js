@@ -12,6 +12,7 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify-es').default,
     rename = require('gulp-rename'),
     browserSync = require('browser-sync').create(),
+    sequence = require('gulp-sequence'),
     del = require('del'),
     replace = require('gulp-replace');
 
@@ -98,21 +99,17 @@ gulp.task('clean', function () {
 });
 
 // Build
-gulp.task('build', ['clean'], function () {
-    gulp.start('html', 'styles', 'scripts');
-});
+gulp.task('build', sequence('clean', 'html', ['styles', 'scripts']));
 
 // Default task
-gulp.task('default', function () {
-    gulp.start('build');
-});
+gulp.task('default', ['build']);
 
 // Watch
-gulp.task('watch', ['clean', 'styles', 'scripts', 'server'], function () {
+gulp.task('watch', sequence('clean', 'server', ['styles', 'scripts'], function () {
     // Watch .scss files
     gulp.watch('src/scss/**/*.scss', ['styles']);
     // Watch .js files
     gulp.watch('src/scripts/**/*.js', ['scripts']);
     // Watch html files
     gulp.watch('*.html').on('change', browserSync.reload);
-});
+}));

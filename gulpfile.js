@@ -78,6 +78,10 @@ gulp.task('scripts', function () {
         ]
     });
     return b.bundle()
+        .on('error', function (err) {
+            console.error(err);
+            this.emit('end');
+        })
         .pipe(source('bundle.js'))
         .pipe(buffer())
         .pipe(print())

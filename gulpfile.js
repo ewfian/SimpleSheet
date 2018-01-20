@@ -1,20 +1,28 @@
 // Load plugins
 var gulp = require('gulp'),
     sass = require('gulp-sass'),
-    autoprefixer = require('gulp-autoprefixer'),
-    cssnano = require('gulp-cssnano'),
-    minify = require('gulp-minify-css'),
-    sourcemaps = require('gulp-sourcemaps'),
-    concat = require('gulp-concat'),
-    babel = require('gulp-babel'),
-    htmlmin = require('gulp-htmlmin'),
-    // md5 = require('gulp-md5-plus'),
-    uglify = require('gulp-uglify-es').default,
+    sequence = require('gulp-sequence'),
+    print = require('gulp-print'),
+    replace = require('gulp-replace'),
+    del = require('del'),
     rename = require('gulp-rename'),
     browserSync = require('browser-sync').create(),
-    sequence = require('gulp-sequence'),
-    del = require('del'),
-    replace = require('gulp-replace');
+    sourcemaps = require('gulp-sourcemaps'),
+    concat = require('gulp-concat'),
+    // md5 = require('gulp-md5-plus'),
+
+    postcss = require('gulp-postcss'),
+    autoprefixer = require('autoprefixer'),
+    cssnano = require('cssnano'),
+
+    browserify = require('browserify'),
+    babelify = require('babelify'),
+    uglify = require('gulp-uglify-es').default,
+    source = require('vinyl-source-stream'),
+    buffer = require('vinyl-buffer'),
+
+    htmlmin = require('gulp-htmlmin');
+
 
 // Server
 gulp.task('server', function () {
@@ -29,13 +37,17 @@ gulp.task('server', function () {
 // Styles
 gulp.task('styles', function () {
     return gulp.src('src/scss/**/*.scss')
+        .pipe(print())
         .pipe(sourcemaps.init())
         .pipe(sass().on('error', sass.logError))
         .on('error', sass.logError)
-        .pipe(autoprefixer('last 2 version'))
-        .pipe(cssnano())
+        .pipe(postcss(
+            [
+                autoprefixer(['last 2 versions', 'safari >= 7']),
+                cssnano()
+            ]
+        ))
         .pipe(concat('all.css'))
-        .pipe(minify())
         .pipe(rename({
             suffix: '.min'
         }))
@@ -49,12 +61,29 @@ gulp.task('styles', function () {
 
 // Scripts
 gulp.task('scripts', function () {
-    return gulp.src('src/scripts/**/*.js')
-        .pipe(sourcemaps.init())
-        .pipe(babel({
-            presets: ['env']
-        }))
-        .pipe(concat('all.js'))
+    var b = browserify({
+        entries: 'src/scripts/entry.js',
+        debug: true,
+        transform: [
+            [babelify, {
+                'presets': [
+                    ['env', {
+                        'targets': {
+                            'browsers': ['last 2 versions', 'safari >= 7']
+                        },
+                        debug: true
+                    }]
+                ]
+            }]
+        ]
+    });
+    return b.bundle()
+        .pipe(source('bundle.js'))
+        .pipe(buffer())
+        .pipe(print())
+        .pipe(sourcemaps.init({
+            loadMaps: true
+        })) //[loadMaps: true] must be enabled
         .pipe(uglify())
         .pipe(rename({
             suffix: '.min'
@@ -105,11 +134,11 @@ gulp.task('build', sequence('clean', 'html', ['styles', 'scripts']));
 gulp.task('default', ['build']);
 
 // Watch
-gulp.task('watch', sequence('clean', 'server', ['styles', 'scripts'], function () {
+gulp.task('watch', ['build', 'server'], function () {
     // Watch .scss files
     gulp.watch('src/scss/**/*.scss', ['styles']);
     // Watch .js files
     gulp.watch('src/scripts/**/*.js', ['scripts']);
     // Watch html files
     gulp.watch('*.html').on('change', browserSync.reload);
-}));
+});

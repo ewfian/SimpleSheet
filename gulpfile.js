@@ -127,14 +127,17 @@ gulp.task('clean', function () {
     return del('dist/');
 });
 
+// Common
+gulp.task('_assets', sequence('clean', ['styles', 'scripts']));
+
 // Build
-gulp.task('build', sequence('clean', 'html', ['styles', 'scripts']));
+gulp.task('build', sequence('_assets', 'html'));
 
 // Default task
 gulp.task('default', ['build']);
 
 // Watch
-gulp.task('watch', ['build', 'server'], function () {
+gulp.task('watch', ['_assets', 'server'], function () {
     // Watch .scss files
     gulp.watch('src/scss/**/*.scss', ['styles']);
     // Watch .js files

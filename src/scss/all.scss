@@ -1,0 +1,8 @@
+@import "ase";
+
+#sheet-container {
+    background-color: rgb(221, 134, 134);
+    width: 100px;
+    height: 100px;
+    @include opacity(0.85);
+}

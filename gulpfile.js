@@ -8,7 +8,7 @@ var gulp = require('gulp'),
     rename = require('gulp-rename'),
     browserSync = require('browser-sync').create(),
     sourcemaps = require('gulp-sourcemaps'),
-    concat = require('gulp-concat'),
+    // concat = require('gulp-concat'),
     // md5 = require('gulp-md5-plus'),
 
     postcss = require('gulp-postcss'),
@@ -23,6 +23,18 @@ var gulp = require('gulp'),
 
     htmlmin = require('gulp-htmlmin');
 
+var browsersList = [
+    'last 2 major version',
+    '>= 1%',
+    'Chrome >= 45',
+    'Firefox >= 38',
+    'Edge >= 12',
+    'Explorer >= 10',
+    'iOS >= 9',
+    'Safari >= 8',
+    'Android >= 4.4',
+    'Opera >= 30'
+];
 
 // Server
 gulp.task('server', function () {
@@ -36,18 +48,19 @@ gulp.task('server', function () {
 
 // Styles
 gulp.task('styles', function () {
-    return gulp.src('src/scss/**/*.scss')
+    return gulp.src('src/scss/all.scss')
         .pipe(print())
         .pipe(sourcemaps.init())
         .pipe(sass().on('error', sass.logError))
         .on('error', sass.logError)
         .pipe(postcss(
             [
-                autoprefixer(['last 2 versions', 'safari >= 7']),
+                autoprefixer(browsersList),
                 cssnano()
             ]
         ))
-        .pipe(concat('all.css'))
+        .pipe(print())
+        // .pipe(concat('all.css'))
         .pipe(rename({
             suffix: '.min'
         }))
@@ -69,7 +82,7 @@ gulp.task('scripts', function () {
                 'presets': [
                     ['env', {
                         'targets': {
-                            'browsers': ['last 2 versions', 'safari >= 7']
+                            'browsers': browsersList
                         },
                         debug: true
                     }]

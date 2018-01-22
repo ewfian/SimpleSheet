@@ -1,0 +1,13 @@
+@import "./variables/variables";
+@import "./utilities/utilities";
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    font-family: $base-font;
+    font-size: 100%;
+}

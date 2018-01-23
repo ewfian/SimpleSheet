@@ -1,0 +1,29 @@
+@import "sheet_base";
+.sheet-header {
+    .title-bar {
+        background-color: $base-color;
+        text-align: center;
+        padding: 2px;
+    }
+    .menu-bar {
+        min-height: 20px;
+    }
+    .tools-bar {
+        min-height: 80px;
+        background-color: $base-color;
+    }
+    .formula-bar {
+        min-height: 20px;
+    }
+}
+
+.page-content {
+    background-color: $base-color;
+    overflow: scroll;
+    height: 1px;
+    .workspace {
+        height: 800px;
+        background-color: rebeccapurple;
+        width: 1200px;
+    }
+}

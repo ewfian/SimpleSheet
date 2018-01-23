@@ -1,5 +1,6 @@
-@mixin opacity($opacity:1) {
-    opacity: $opacity;
-    $opacity-ie: $opacity * 100;
-    filter: alpha(opacity=$opacity-ie); //IE8
-}
+ // usage: @include opacity(0.85);
+ @mixin opacity($opacity:1) {
+     opacity: $opacity;
+     $opacity-ie: $opacity * 100;
+     filter: alpha(opacity=$opacity-ie); //IE8
+ }

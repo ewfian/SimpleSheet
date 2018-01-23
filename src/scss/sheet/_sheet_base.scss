@@ -1,17 +1,15 @@
-#sheet-container {
+%sheet-base {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    justify-content: space-between;
     min-height: 100vh;
-    header.sheet-header {
+    .sheet-header {
         flex-shrink: 0;
     }
-    section.page-content {
+    .workspace {
         flex-grow: 1;
     }
-    footer.sheet-footer {
+    .sheet-footer {
         flex-shrink: 0;
-        background-color: green;
     }
 }

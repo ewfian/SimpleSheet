@@ -1,0 +1,25 @@
+%table-grid {
+    flex-grow: 1;
+    flex-shrink: 0;
+    position: relative;
+    .table-cell {
+        position: absolute;
+        width: 72px;
+        height: 18px;
+        border-right: 1px solid #d4d4d4;
+        border-bottom: 1px solid #d4d4d4;
+        cursor: cell;
+        &:nth-child(2) {
+            top: 18px;
+        }
+        &:nth-child(3) {
+            left: 72px;
+        }
+        &:nth-child(4) {
+            top: 36px;
+        }
+        &:nth-child(5) {
+            left: 144px;
+        }
+    }
+}

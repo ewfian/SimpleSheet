@@ -1,13 +1,16 @@
-@import "./variables/variables";
-@import "./utilities/utilities";
 *,
 *::before,
 *::after {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    user-select: none;
 }
 
 html,
 body {
     font-family: $base-font;
     font-size: 100%;
+    overflow: hidden;
 }

@@ -1,0 +1,16 @@
+@import "sheet_base";
+@import "sheet_header";
+@import "workspace/workspace";
+@import "sheet_footer";
+#sheet-container {
+    @extend %sheet-base;
+    .sheet-header {
+        @extend %sheet-header;
+    }
+    .workspace {
+        @extend %workspace;
+    }
+    .sheet-footer {
+        @extend %sheet-footer;
+    }
+}

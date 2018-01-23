@@ -1,8 +1,4 @@
-@import "base";
-
-#sheet-container {
-    background-color: rgb(221, 134, 134);
-    width: 100px;
-    height: 100px;
-    @include opacity(0.85);
-}
+@import "./variables/variables";
+@import "./utilities/utilities";
+@import "global_base";
+@import "sheet/sheet"

@@ -1,0 +1,15 @@
+%sheet-base {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    min-height: 100vh;
+    .sheet-header {
+        flex-shrink: 0;
+    }
+    .workspace {
+        flex-grow: 1;
+    }
+    .sheet-footer {
+        flex-shrink: 0;
+    }
+}

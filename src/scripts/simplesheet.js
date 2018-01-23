@@ -44,7 +44,7 @@ var SimpleSheet = function (query) {
     }, 6)]);
 
 
-    this.container.appendChild(e2.render());
+    // this.container.appendChild(e2.render());
     console.log(e2);
     console.log(e2.render());
 

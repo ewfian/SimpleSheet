@@ -36,6 +36,7 @@
         .ruler-corner {
             flex-shrink: 0;
             position: relative;
+            z-index: 4;
             background: $base-color;
             min-width: 32px;
             border-bottom: 1px solid;
@@ -63,9 +64,6 @@
                 border-right: 1px solid;
                 border-bottom: 1px solid;
                 border-image: linear-gradient(180deg, $base-color 10%, $ruler-border-color) 5;
-                &:first-child {
-                    // width: 100px;
-                }
                 &:after {
                     content: "";
                     position: absolute;
@@ -75,6 +73,7 @@
                     top: 0;
                     z-index: 1;
                     cursor: col-resize;
+                    background-color: rgba(255, 0, 0, 0.267);
                 }
             }
         }
@@ -102,18 +101,16 @@
                 border-right: 1px solid;
                 border-bottom: 1px solid;
                 border-image: linear-gradient(90deg, $base-color 10%, $ruler-border-color) 5;
-                &:first-child {
-                    // height: 40px;
-                }
                 &:after {
                     content: "";
                     position: absolute;
                     left: 0;
-                    bottom: -3px;
+                    bottom: -4px;
                     width: 100%;
-                    height: 5px;
+                    height: 8px;
                     z-index: 1;
                     cursor: row-resize;
+                    background-color: rgba(255, 0, 0, 0.267);
                 }
             }
         }

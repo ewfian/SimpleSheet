@@ -6,7 +6,7 @@
     @extend %sheet-base;
     .sheet-header {
         @extend %sheet-header;
-        display: none;
+        // display: none;
     }
     .workspace {
         @extend %workspace;

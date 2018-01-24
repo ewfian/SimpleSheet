@@ -2,7 +2,7 @@
 @import "table_grid";
 %workspace {
     display: flex;
-    // background-color: rgb(255, 147, 147);
+    background-color: $base-color;
     .page-container {
         // background-color: rgba(255, 174, 0, 0.521);
         flex-grow: 1;
@@ -13,16 +13,16 @@
         position: relative;
         @extend %rulers;
         .table-content {
+            // background-color: rgba(255, 0, 0, 0.445);
             flex-grow: 1;
             display: flex;
             flex-wrap: nowrap;
             width: 100vw;
-            // background-color: rgba(255, 0, 0, 0.445);
             .table-grid {
+                // background-color: rgb(167, 163, 124);
                 flex-grow: 1;
                 overflow: auto;
                 @extend %table-grid;
-                // background-color: rgb(167, 163, 124);
             }
         }
     }

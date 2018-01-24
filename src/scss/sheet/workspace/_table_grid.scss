@@ -6,8 +6,9 @@
         position: absolute;
         width: 72px;
         height: 18px;
-        border-right: 1px solid #d4d4d4;
-        border-bottom: 1px solid #d4d4d4;
+        background-color: $table-grid-cell-bg-color;
+        border-right: 1px solid $table-grid-cell-border-color;
+        border-bottom: 1px solid $table-grid-cell-border-color;
         cursor: cell;
         &:nth-child(2) {
             top: 18px;
@@ -21,7 +22,7 @@
         }
         &:nth-child(5) {
             left: 144px;
-            width: 720px;
+            width: 400px;
         }
     }
 }

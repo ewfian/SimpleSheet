@@ -23,20 +23,12 @@
         flex-shrink: 0;
         display: flex;
         height: 20px;
-        position: relative;
-        &:after {
-            content: "";
-            position: absolute;
-            left: 30px;
-            bottom: 0px;
-            width: 72px + 2px;
-            height: 2px;
-            background-color: $ruler-selected-color;
-        }
         .ruler-corner {
             flex-shrink: 0;
             position: relative;
+            z-index: 2;
             background: $base-color;
+            height: 20px;
             min-width: 32px;
             border-bottom: 1px solid;
             border-right: 1px solid;
@@ -55,18 +47,29 @@
             }
         }
         .ruler-cells {
+            // left: -70px; //horizontal ruler scoll
             flex-shrink: 0;
+            position: relative;
             display: flex;
+            &:after {
+                //selected rulers
+                content: "";
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                width: 72px;
+                height: 2px;
+                z-index: 0;
+                background-color: $ruler-selected-color;
+            }
             .ruler-cell {
                 width: 72px;
                 height: 20px;
                 border-right: 1px solid;
                 border-bottom: 1px solid;
                 border-image: linear-gradient(180deg, $base-color 10%, $ruler-border-color) 5;
-                &:first-child {
-                    // width: 100px;
-                }
                 &:after {
+                    //horizontal resizer
                     content: "";
                     position: absolute;
                     width: 9px;
@@ -75,45 +78,48 @@
                     top: 0;
                     z-index: 1;
                     cursor: col-resize;
+                    // background-color: rgba(255, 0, 0, 0.267);
                 }
             }
         }
     }
     .vertical-ruler {
+        // top: -20px;//vertical ruler scoll
         flex-shrink: 0;
         width: 32px;
         position: relative;
-        &:after {
-            content: "";
-            position: absolute;
-            right: 0;
-            top: 0px;
-            width: 2px;
-            height: 36px;
-            background-color: $ruler-selected-color;
-        }
         .ruler-cells {
             flex-shrink: 0;
             display: flex;
             flex-direction: column;
+            &:after {
+                //selected rulers
+                content: "";
+                position: absolute;
+                right: 0;
+                top: 0px;
+                width: 2px;
+                height: 36px;
+                z-index: 0;
+                background-color: $ruler-selected-color;
+            }
             .ruler-cell {
                 width: 32px;
                 height: 18px;
                 border-right: 1px solid;
                 border-bottom: 1px solid;
                 border-image: linear-gradient(90deg, $base-color 10%, $ruler-border-color) 5;
-                &:first-child {
-                    // height: 40px;
-                }
                 &:after {
+                    //vertical resize
                     content: "";
                     position: absolute;
                     left: 0;
-                    bottom: -3px;
+                    bottom: -4px;
                     width: 100%;
-                    height: 5px;
+                    height: 8px;
                     z-index: 1;
                     cursor: row-resize;
+                    // background-color: rgba(255, 0, 0, 0.267);
                 }
             }
         }

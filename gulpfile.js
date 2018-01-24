@@ -4,12 +4,12 @@ var gulp = require('gulp'),
     sequence = require('gulp-sequence'),
     print = require('gulp-print'),
     replace = require('gulp-replace'),
+    gulpif = require('gulp-if'),
     del = require('del'),
     rename = require('gulp-rename'),
     browserSync = require('browser-sync').create(),
     sourcemaps = require('gulp-sourcemaps'),
-    // concat = require('gulp-concat'),
-    // md5 = require('gulp-md5-plus'),
+    md5 = require('gulp-md5-plus'),
 
     postcss = require('gulp-postcss'),
     autoprefixer = require('autoprefixer'),
@@ -35,6 +35,8 @@ var browsersList = [
     'Android >= 4.4',
     'Opera >= 30'
 ];
+
+var isBuildTask = ['build', 'default'].indexOf(process.argv.slice(2)[0] || 'default') > -1;
 
 // Server
 gulp.task('server', function () {
@@ -64,9 +66,9 @@ gulp.task('styles', function () {
         .pipe(rename({
             suffix: '.min'
         }))
-        // .pipe(md5(10, 'dist/*.html', {
-        //     connector: '.'
-        // }))
+        .pipe(gulpif(isBuildTask, md5(10, 'dist/*.html', {
+            connector: '.'
+        })))
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('dist/styles'))
         .pipe(browserSync.stream());
@@ -105,9 +107,9 @@ gulp.task('scripts', function () {
         .pipe(rename({
             suffix: '.min'
         }))
-        // .pipe(md5(10, 'dist/*.html', {
-        //     connector: '.'
-        // }))
+        .pipe(gulpif(isBuildTask, md5(10, 'dist/*.html', {
+            connector: '.'
+        })))
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('dist/scripts'))
         .pipe(browserSync.stream());
@@ -144,17 +146,15 @@ gulp.task('clean', function () {
     return del('dist/');
 });
 
-// Common
-gulp.task('_assets', sequence('clean', ['styles', 'scripts']));
-
 // Build
-gulp.task('build', sequence('_assets', 'html'));
+gulp.task('build', sequence('clean', 'html', ['styles', 'scripts']));
 
 // Default task
 gulp.task('default', ['build']);
 
 // Watch
-gulp.task('watch', ['_assets', 'server'], function () {
+gulp.task('_watch_assets', sequence('clean', ['styles', 'scripts'], 'server'));
+gulp.task('watch', ['_watch_assets'], function () {
     // Watch .scss files
     gulp.watch('src/scss/**/*.scss', ['styles']);
     // Watch .js files

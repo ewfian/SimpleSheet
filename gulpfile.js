@@ -51,8 +51,7 @@ gulp.task('server', function () {
 // Styles
 gulp.task('styles', function () {
     return gulp.src('src/scss/all.scss')
-        .pipe(print())
-        .pipe(sourcemaps.init())
+        .pipe(gulpif(!isBuildTask, sourcemaps.init()))
         .pipe(sass().on('error', sass.logError))
         .on('error', sass.logError)
         .pipe(postcss(
@@ -78,7 +77,7 @@ gulp.task('styles', function () {
 gulp.task('scripts', function () {
     var b = browserify({
         entries: 'src/scripts/entry.js',
-        debug: true,
+        debug: !isBuildTask,
         transform: [
             [babelify, {
                 'presets': [
@@ -86,7 +85,7 @@ gulp.task('scripts', function () {
                         'targets': {
                             'browsers': browsersList
                         },
-                        debug: true
+                        debug: !isBuildTask
                     }]
                 ]
             }]
@@ -100,9 +99,9 @@ gulp.task('scripts', function () {
         .pipe(source('bundle.js'))
         .pipe(buffer())
         .pipe(print())
-        .pipe(sourcemaps.init({
+        .pipe(gulpif(!isBuildTask, sourcemaps.init({
             loadMaps: true
-        })) //[loadMaps: true] must be enabled
+        }))) //[loadMaps: true] must be enabled
         .pipe(uglify())
         .pipe(rename({
             suffix: '.min'

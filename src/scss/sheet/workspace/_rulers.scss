@@ -47,12 +47,12 @@
             }
         }
         .ruler-cells {
-            // left: -70px; //horizontal ruler scoll
+            // left: -70px; // horizontal ruler scroll
             flex-shrink: 0;
             position: relative;
             display: flex;
             &:after {
-                //selected rulers
+                // selected rulers
                 content: "";
                 position: absolute;
                 left: 0;
@@ -69,7 +69,8 @@
                 border-bottom: 1px solid;
                 border-image: linear-gradient(180deg, $base-color 10%, $ruler-border-color) 5;
                 &:after {
-                    //horizontal resizer
+                    // horizontal resizer
+                    // background-color: rgba(255, 0, 0, 0.267);
                     content: "";
                     position: absolute;
                     width: 9px;
@@ -78,13 +79,15 @@
                     top: 0;
                     z-index: 1;
                     cursor: col-resize;
-                    // background-color: rgba(255, 0, 0, 0.267);
+                }
+                &:last-child {
+                    border-right: 0;
                 }
             }
         }
     }
     .vertical-ruler {
-        // top: -20px;//vertical ruler scoll
+        // top: -20px; // vertical ruler scroll
         flex-shrink: 0;
         width: 32px;
         position: relative;
@@ -93,7 +96,7 @@
             display: flex;
             flex-direction: column;
             &:after {
-                //selected rulers
+                // selected rulers
                 content: "";
                 position: absolute;
                 right: 0;
@@ -110,7 +113,8 @@
                 border-bottom: 1px solid;
                 border-image: linear-gradient(90deg, $base-color 10%, $ruler-border-color) 5;
                 &:after {
-                    //vertical resize
+                    // vertical resize
+                    // background-color: rgba(255, 0, 0, 0.267);
                     content: "";
                     position: absolute;
                     left: 0;
@@ -119,7 +123,9 @@
                     height: 8px;
                     z-index: 1;
                     cursor: row-resize;
-                    // background-color: rgba(255, 0, 0, 0.267);
+                }
+                &:last-child {
+                    border-bottom: 0;
                 }
             }
         }

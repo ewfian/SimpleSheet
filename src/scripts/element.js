@@ -18,14 +18,22 @@ function Element(tagName, props, children) {
     this.children = _.isArray(children) ? children : [].concat(children || []);
 }
 
+Element.prototype.appendChild = function (child) {
+    this.children.push(child);
+};
+
+Element.prototype.appendChildren = function (children) {
+    this.children.push(...children);
+};
+
 Element.prototype.render = function () {
-    var el = document.createElement(this.tagName);
-    var props = this.props;
+    let el = document.createElement(this.tagName);
+    let props = this.props;
 
     if (_.isObject(props)) {
-        for (var propName in props) {
+        for (let propName in props) {
             if (props.hasOwnProperty(propName)) {
-                var propValue = props[propName];
+                let propValue = props[propName];
                 _.setAttr(el, propName, propValue);
             }
         }

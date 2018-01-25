@@ -3,12 +3,20 @@
     flex-direction: column;
     flex-wrap: nowrap;
     min-height: 100vh;
+    //https://stackoverflow.com/questions/37905749/flexbox-not-working-in-internet-explorer-11
+    //fix IE11
+    height: 100vh;
     .sheet-header {
         flex-shrink: 0;
     }
     .workspace {
         flex-grow: 1;
-        flex-basis: 0;
+        //https://philipwalton.com/articles/normalizing-cross-browser-flexbox-bugs/
+        //Also use 0% instead of 0px since minifiers will often convert 0px to 0 (which is unitless and will have the same problem).
+        flex-basis: 0%;
+        //fix Edge
+        min-height: 0;
+        height: 0;
     }
     .sheet-footer {
         flex-shrink: 0;

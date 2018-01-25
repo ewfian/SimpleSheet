@@ -47,7 +47,7 @@
             }
         }
         .ruler-cells {
-            // left: -70px; // horizontal ruler scoll
+            // left: -70px; // horizontal ruler scroll
             flex-shrink: 0;
             position: relative;
             display: flex;
@@ -87,7 +87,7 @@
         }
     }
     .vertical-ruler {
-        // top: -20px; // vertical ruler scoll
+        // top: -20px; // vertical ruler scroll
         flex-shrink: 0;
         width: 32px;
         position: relative;

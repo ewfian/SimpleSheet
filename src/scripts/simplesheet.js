@@ -1,52 +1,53 @@
 import Element from './element';
+import Div from './div';
 
-var SimpleSheet = function (query) {
+let SimpleSheet = function (query) {
     this.container = document.querySelector(query);
-    console.log(query);
+    let root = this.container;
+
+    let hRulerCells = new Div('ruler-cells', [].concat.apply([], Array(26))
+        .map((_, i) => {
+            return new Div('ruler-cell', String.fromCharCode(i + 65));
+        }));
+
+    let vRulerCells = new Div('ruler-cells', [].concat.apply([], Array(50))
+        .map((_, i) => {
+            return new Div('ruler-cell', i + 1);
+        }));
 
 
-    var e0 = new Element('div', {
-        class: 'saf',
-        style: {
-            'background-color': 'red',
-            'height': 50,
-            'width': 50,
-            'position': 'absolute',
-            top: '6rem'
+    let tableCells = new Div('table-grid', [].concat.apply([], Array(26 * 50))
+        .map((_, i) => {
+            return new Element('div', {
+                style: {
+                    left: (i % 26) * 72,
+                    top: Math.floor(i / 26) * 18,
+
+                },
+                class: 'table-cell'
+            });
+        }));
+
+    root.querySelector('.horizontal-ruler').appendChild(hRulerCells.render());
+    root.querySelector('.vertical-ruler').appendChild(vRulerCells.render());
+    root.querySelector('.table-content').appendChild(tableCells.render());
+
+
+    let ticking = false;
+    root.querySelector('.table-grid').addEventListener('scroll', (e) => {
+        let {
+            scrollTop,
+            scrollLeft
+        } = e.target;
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                root.querySelector('.vertical-ruler').style.top = -scrollTop + 'px';
+                root.querySelector('.horizontal-ruler .ruler-cells').style.left = -scrollLeft + 'px';
+                ticking = false;
+            });
+            ticking = true;
         }
-    }, ['simple', new Element('input', {
-        'value': 1232,
-        class: 'dd',
-        style: {
-            top: 30,
-            'position': 'absolute',
-        }
-    })]);
-
-    var e1 = new Element('select', {
-        'id': 'select0'
-    }, new Element(
-        'option', {
-            'value': '2'
-        }, 'one'
-    ));
-
-    var e2 = new Element('div', {
-        style: {
-            'position': 'relative'
-        },
-        height: 10,
-        width: 20
-    }, [456, e0, new Element('button', 5), new Element('button', {
-        style: {
-            'font-size': '20pt'
-        }
-    }, 6)]);
-
-
-    // this.container.appendChild(e2.render());
-    console.log(e2);
-    console.log(e2.render());
+    });
 
 };
 

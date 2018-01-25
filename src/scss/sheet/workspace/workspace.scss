@@ -18,6 +18,7 @@
             display: flex;
             flex-wrap: nowrap;
             width: 100vw;
+            overflow: hidden;
             .table-grid {
                 // background-color: rgb(167, 163, 124);
                 flex-grow: 1;

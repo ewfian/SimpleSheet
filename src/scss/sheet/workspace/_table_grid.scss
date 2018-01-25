@@ -10,19 +10,5 @@
         border-right: 1px solid $table-grid-cell-border-color;
         border-bottom: 1px solid $table-grid-cell-border-color;
         cursor: cell;
-        &:nth-child(2) {
-            top: 18px;
-        }
-        &:nth-child(3) {
-            left: 72px;
-        }
-        &:nth-child(4) {
-            top: 36px;
-            height: 360px;
-        }
-        &:nth-child(5) {
-            left: 144px;
-            width: 400px;
-        }
     }
 }

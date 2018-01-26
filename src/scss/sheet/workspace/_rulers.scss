@@ -30,6 +30,7 @@
             background: $base-color;
             height: 20px;
             min-width: 32px;
+            color: transparent;
             border-bottom: 1px solid;
             border-right: 1px solid;
             border-image: linear-gradient(145deg, $base-color 50%, $ruler-border-color) 5;
@@ -89,7 +90,7 @@
     .vertical-ruler {
         // top: -20px; // vertical ruler scroll
         flex-shrink: 0;
-        width: 32px;
+        min-width: 32px;
         position: relative;
         .ruler-cells {
             flex-shrink: 0;
@@ -107,7 +108,7 @@
                 background-color: $ruler-selected-color;
             }
             .ruler-cell {
-                width: 32px;
+                min-width: 32px;
                 height: 18px;
                 border-right: 1px solid;
                 border-bottom: 1px solid;

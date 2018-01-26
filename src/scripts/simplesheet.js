@@ -7,33 +7,58 @@ let SimpleSheet = function (query) {
     this.container = document.querySelector(query);
     let root = this.container;
 
-    let hRulerCells = new Div('ruler-cells', [].concat.apply([], Array(26))
-        .map((_, i) => {
-            return new Div('ruler-cell', String.fromCharCode(i + 65));
-        }));
+    let rows = 95,
+        columns = 103;
 
-    let vRulerCells = new Div('ruler-cells', [].concat.apply([], Array(50))
+
+    let generateRulerText = function (index) {
+        let letters = [];
+        index += 1;
+        while (index > 0) {
+            let m = index % 26 || 26;
+            letters.unshift(String.fromCharCode(64 + m));
+            index = (index - m) / 26;
+        }
+        return letters.join('');
+    };
+
+    let hRulerCells = new Div('ruler-cells', [].concat.apply([], Array(columns))
+        .map((_, i) => new Div('ruler-cell', generateRulerText(i)))
+    );
+
+
+    let vRulerCells = new Div('ruler-cells', [].concat.apply([], Array(rows))
         .map((_, i) => {
             return new Div('ruler-cell', i + 1);
         }));
 
-
-    let tableCells = new Div('table-grid', [].concat.apply([], Array(26 * 50))
+    let hTableLines = new Div('h-lines', [].concat.apply([], Array(rows))
         .map((_, i) => {
             return new Element('div', {
                 style: {
-                    left: (i % 26) * 72,
-                    top: Math.floor(i / 26) * 18,
-
+                    top: (i % rows) * 18,
+                    width: columns * 72
                 },
-                class: 'table-cell'
+                class: 'line'
+            });
+        }));
+
+    let vTableLines = new Div('v-lines', [].concat.apply([], Array(columns))
+        .map((_, i) => {
+            return new Element('div', {
+                style: {
+                    left: (i % columns) * 72,
+                    height: rows * 18,
+                },
+                class: 'line'
             });
         }));
 
     root.querySelector('.horizontal-ruler').appendChild(hRulerCells.render());
     root.querySelector('.vertical-ruler').appendChild(vRulerCells.render());
-    root.querySelector('.table-content').appendChild(tableCells.render());
 
+    root.querySelector('.grid-bg').appendChild(hTableLines.render());
+    root.querySelector('.grid-bg').appendChild(vTableLines.render());
 
     let scrollElement = root.querySelector('.table-grid');
     let ticking = false;

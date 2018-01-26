@@ -2,13 +2,21 @@
     flex-grow: 1;
     flex-shrink: 0;
     position: relative;
-    .table-cell {
-        position: absolute;
-        width: 72px;
-        height: 18px;
-        background-color: $table-grid-cell-bg-color;
-        border-right: 1px solid $table-grid-cell-border-color;
-        border-bottom: 1px solid $table-grid-cell-border-color;
-        cursor: cell;
+    background-color: $table-grid-cell-bg-color;
+    .grid-bg {
+        .h-lines .line {
+            left: 0;
+            height: 18px;
+            border-bottom: 1px solid $table-grid-cell-border-color;
+        }
+        .v-lines .line {
+            top: 0;
+            width: 72px;
+            border-right: 1px solid $table-grid-cell-border-color;
+        }
+        .line {
+            position: absolute;
+            cursor: cell;
+        }
     }
 }

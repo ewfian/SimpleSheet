@@ -72,3 +72,7 @@ Vector2.prototype.init = function (x, y) {
     this.y = y;
     return this;
 };
+
+Vector2.prototype.getAngleDegrees = function(){
+    return Math.atan2(this.y, this.x) * 180 / Math.PI;
+};

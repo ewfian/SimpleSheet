@@ -10,23 +10,22 @@ let SimpleSheet = function (query) {
     let rows = 95,
         columns = 103;
 
+
+    let generateRulerText = function (index) {
+        let letters = [];
+        index += 1;
+        while (index > 0) {
+            let m = index % 26 || 26;
+            letters.unshift(String.fromCharCode(64 + m));
+            index = (index - m) / 26;
+        }
+        return letters.join('');
+    };
+
     let hRulerCells = new Div('ruler-cells', [].concat.apply([], Array(columns))
-        .map((_, i) => {
-            let _length = Math.floor(Math.log(i + 1) / Math.log(26.5));
-            return new Div('ruler-cell',
-                Array.apply(null, {
-                    length: _length + 1
-                }).map(
-                    (_, j) => String.fromCharCode(
-                        (Math.floor(i / Math.pow(26, _length)) - 1) *
-                        (_length - j) +
-                        Math.floor((i % 26) / Math.pow(26, _length - j)) +
-                        65
-                    )
-                ).join('')
-            );
-        })
+        .map((_, i) => new Div('ruler-cell', generateRulerText(i)))
     );
+
 
     let vRulerCells = new Div('ruler-cells', [].concat.apply([], Array(rows))
         .map((_, i) => {
@@ -48,7 +47,7 @@ let SimpleSheet = function (query) {
         .map((_, i) => {
             return new Element('div', {
                 style: {
-                    left: ((i % columns) + 1) * 72,
+                    left: (i % columns) * 72,
                     height: rows * 18,
                 },
                 class: 'line'

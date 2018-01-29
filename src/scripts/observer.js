@@ -33,7 +33,7 @@ export function Observer(obj) {
                         var dep = _array.__observe__;
                         var re = arrayPrototype[method].apply(_array, arguments);
                         dep.notify();
-                        console.log('noti arr', dep);
+                        // console.log('arr notify', dep);
                         return re;
                     },
                     enumerable: false,
@@ -73,11 +73,8 @@ function defineProperty(obj, prop, val) {
             var target = Depend.target;
             if (target) {
                 dep.addSub(target);
-                console.log('add dep', dep);
                 if (childDep) {
                     childDep.addSub(target);
-                    console.log('add dep(child)', dep);
-
                 }
             }
             return val;
@@ -86,8 +83,7 @@ function defineProperty(obj, prop, val) {
             if (newVal != val) {
                 val = newVal;
                 dep.notify();
-                console.log('noti dep', dep);
-
+                // console.log('obj notify', dep);
             }
         }
     });

@@ -35,24 +35,60 @@ let SimpleSheet = function (el) {
     this.observer = new Observer(this.layout);
 
     new Watcher(this.layout, 'axis.horizontal', (value, oldValue) => {
-        // console.log(value);
-        // console.log('update', "new:" + value, ',old:' + oldValue);
-        // console.log(oldValue);
-        // console.log('--------------------');
+        console.log('--------------------Watcher-----------------');
+        console.log(oldValue);
+        console.log('↓axis.horizontal↓');
+        console.log(value);
+        console.log('--------------------Watcher-----------------');
     });
 
+    new Watcher(this.layout, 'axis.vertical', (value, oldValue) => {
+        console.log('--------------------Watcher-----------------');
+        console.log(oldValue);
+        console.log('↓axis.vertical↓');
+        console.log(value);
+        console.log('--------------------Watcher-----------------');
+    });
+
+    new Watcher(this.layout, 'arr', (value, oldValue) => {
+        console.log('--------------------Watcher-----------------');
+        console.log(oldValue);
+        console.log('↓arr↓');
+        console.log(value);
+        console.log('--------------------Watcher-----------------');
+    });
+
+    new Watcher(this.layout, 'arr', (value, oldValue) => {
+        console.log('--------------------Watcher-----------------');
+        console.log(oldValue);
+        console.log('↓arr↓2↓');
+        console.log(value);
+        console.log('--------------------Watcher-----------------');
+    });
+
+
+    new Watcher(this.layout, 'axis', (value, oldValue) => {
+        console.log('--------------------Watcher-----------------');
+        console.log(oldValue);
+        console.log('↓axis↓');
+        console.log(value);
+        console.log('--------------------Watcher-----------------');
+    });
 
 
 
     this.layout.axis.horizontal.push(1);
     this.layout.axis.horizontal.push(2);
     this.layout.axis.horizontal.push(3);
+    this.layout.axis.horizontal.shift();
+    this.layout.axis.horizontal.unshift(5);
+    this.layout.axis.horizontal.splice(1, 1, 10);
 
     this.layout.axis.vertical = null;
     this.layout.axis = 2;
 
-    // this.layout.arr = 2;
-    // this.layout.arr = 3;
+    this.layout.arr = 2;
+    this.layout.arr = 3;
 
 
     // console.log(this.layout);

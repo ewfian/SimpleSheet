@@ -1,4 +1,7 @@
 import Depend from './depend';
+import {
+    isObject
+} from './util';
 
 function Watcher(model, expression, update) {
     this.model = model;
@@ -9,12 +12,11 @@ function Watcher(model, expression, update) {
     Depend.target = this;
     this.value = this.getter(model);
     Depend.target = null;
-    console.log('watch constr');
 }
 
 Watcher.prototype.run = function () {
     var oldValue = this.value;
-    var newValue = this.getter(this.model);
+    var newValue = this.value = this.getter(this.model);
     this.update(newValue, oldValue);
 };
 
@@ -25,7 +27,10 @@ let getValue = function (exp) {
         exps.forEach(key => {
             obj = obj[key.trim()];
         });
-        return obj;
+        return isObject(obj) ? JSON.parse(JSON.stringify(obj, (key, value) =>
+            // https://stackoverflow.com/questions/4910567/hide-certain-values-in-output-from-json-stringify
+            key == '__observe__' ? undefined : value
+        )) : obj;
     };
 };
 

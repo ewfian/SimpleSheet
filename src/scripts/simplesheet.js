@@ -29,75 +29,36 @@ let SimpleSheet = function (el) {
             horizontal: [],
             vertical: []
         },
-        arr: 1
+        arr: 1,
+        tdiv: 123
     };
-
     this.observer = new Observer(this.layout);
 
-    new Watcher(this.layout, 'axis.horizontal', (value, oldValue) => {
-        console.log('--------------------Watcher-----------------');
-        console.log(oldValue);
-        console.log('↓axis.horizontal↓');
-        console.log(value);
-        console.log('--------------------Watcher-----------------');
+
+    let tDiv = new Element('div', {
+        style: {
+            height: 50,
+            width: 50,
+            position: 'absolute',
+            'background-color': 'rgb(0, 200, 0)'
+        }
+    }).render();
+    tDiv.textContent = this.layout['tdiv'];
+    tDiv._watcher = new Watcher(this.layout, 'tdiv', (value, oldValue) => {
+        tDiv.textContent = typeof value === 'undefined' ? '' : value;
     });
+    root.querySelector('.grid-bg').appendChild(tDiv);
 
-    new Watcher(this.layout, 'axis.vertical', (value, oldValue) => {
-        console.log('--------------------Watcher-----------------');
-        console.log(oldValue);
-        console.log('↓axis.vertical↓');
-        console.log(value);
-        console.log('--------------------Watcher-----------------');
-    });
+    let i = 0;
+    setInterval(() => {
+        this.layout.tdiv = i++;
+    }, 1000);
 
-    new Watcher(this.layout, 'arr', (value, oldValue) => {
-        console.log('--------------------Watcher-----------------');
-        console.log(oldValue);
-        console.log('↓arr↓');
-        console.log(value);
-        console.log('--------------------Watcher-----------------');
-    });
-
-    new Watcher(this.layout, 'arr', (value, oldValue) => {
-        console.log('--------------------Watcher-----------------');
-        console.log(oldValue);
-        console.log('↓arr↓2↓');
-        console.log(value);
-        console.log('--------------------Watcher-----------------');
-    });
-
-
-    new Watcher(this.layout, 'axis', (value, oldValue) => {
-        console.log('--------------------Watcher-----------------');
-        console.log(oldValue);
-        console.log('↓axis↓');
-        console.log(value);
-        console.log('--------------------Watcher-----------------');
-    });
-
-
-
-    this.layout.axis.horizontal.push(1);
-    this.layout.axis.horizontal.push(2);
-    this.layout.axis.horizontal.push(3);
-    this.layout.axis.horizontal.shift();
-    this.layout.axis.horizontal.unshift(5);
-    this.layout.axis.horizontal.splice(1, 1, 10);
-
-    this.layout.axis.vertical = null;
-    this.layout.axis = 2;
-
-    this.layout.arr = 2;
-    this.layout.arr = 3;
-
-
-    // console.log(this.layout);
 
 
     let hRulerCells = new Div('ruler-cells', [].concat.apply([], Array(columns))
         .map((_, i) => new Div('ruler-cell', generateRulerText(i)))
     );
-
 
     let vRulerCells = new Div('ruler-cells', [].concat.apply([], Array(rows))
         .map((_, i) => {

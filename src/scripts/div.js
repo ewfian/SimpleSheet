@@ -1,4 +1,4 @@
-import _ from './util';
+import {inherits} from './util';
 import Element from './element';
 
 
@@ -8,7 +8,6 @@ let Div = function (className, children, props) {
     }, props), children);
 };
 
-_.inherits(Div, Element);
-
+inherits(Div, Element);
 
 export default Div;

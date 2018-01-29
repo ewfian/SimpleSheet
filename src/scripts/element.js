@@ -1,4 +1,4 @@
-import _ from './util';
+import * as _ from './util';
 
 function Element(tagName, props, children) {
     if (!(this instanceof Element)) {

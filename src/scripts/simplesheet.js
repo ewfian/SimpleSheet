@@ -3,24 +3,60 @@ import Div from './div';
 import Vector2 from './vector2';
 import easingFuncs from './easingfuncs';
 
-let SimpleSheet = function (query) {
-    this.container = document.querySelector(query);
+import {
+    Observer
+} from './observer';
+import {
+    generateRulerText
+} from './util';
+
+import Watcher from './watcher';
+
+
+let SimpleSheet = function (el) {
+    this.container = document.querySelector(el);
     let root = this.container;
 
     let rows = 95,
         columns = 103;
 
+    this.$options = {
 
-    let generateRulerText = function (index) {
-        let letters = [];
-        index += 1;
-        while (index > 0) {
-            let m = index % 26 || 26;
-            letters.unshift(String.fromCharCode(64 + m));
-            index = (index - m) / 26;
-        }
-        return letters.join('');
     };
+
+    this.layout = {
+        axis: {
+            horizontal: [],
+            vertical: []
+        },
+        arr: 1
+    };
+
+    this.observer = new Observer(this.layout);
+
+    new Watcher(this.layout, 'axis.horizontal', (value, oldValue) => {
+        // console.log(value);
+        // console.log('update', "new:" + value, ',old:' + oldValue);
+        // console.log(oldValue);
+        // console.log('--------------------');
+    });
+
+
+
+
+    this.layout.axis.horizontal.push(1);
+    this.layout.axis.horizontal.push(2);
+    this.layout.axis.horizontal.push(3);
+
+    this.layout.axis.vertical = null;
+    this.layout.axis = 2;
+
+    // this.layout.arr = 2;
+    // this.layout.arr = 3;
+
+
+    // console.log(this.layout);
+
 
     let hRulerCells = new Div('ruler-cells', [].concat.apply([], Array(columns))
         .map((_, i) => new Div('ruler-cell', generateRulerText(i)))

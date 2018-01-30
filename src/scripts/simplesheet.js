@@ -41,7 +41,8 @@ let SimpleSheet = function (el) {
             'line-height': mvvm.bindModel('height'),
             'border-radius': mvvm.bindModel('radius'),
             'background-color': mvvm.bindModel('color'),
-        }
+        },
+        class: mvvm.bindModel('width')
     }, mvvm.bindModel('color')).render());
     setInterval(() => {
         this.model.width = Math.random() * 200 + 50;

@@ -1,4 +1,4 @@
-import { inherits, isObject, getPixelValue } from './utilities';
+import { inherits, isObject, getPixelValue, setAttr } from './utilities';
 import Element from './element';
 import { Watcher } from './mvvm';
 
@@ -72,6 +72,19 @@ function parseBind(key, value) {
                         }
                     });
                 }
+            }
+            break;
+        default:
+            if (value.hasOwnProperty('__bind__')) {
+                this.props[key] = value.value;
+                this.watchers.push({
+                    model: value.__bind__.model,
+                    expression: value.expression,
+                    update: function (newValue, oldValue) {
+                        let value = typeof newValue === 'undefined' ? '' : newValue;
+                        setAttr(this, key, value);
+                    }
+                });
             }
             break;
     }

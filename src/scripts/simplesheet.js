@@ -1,17 +1,7 @@
 import Element from './element';
 import Div from './div';
-import Vector2 from './vector2';
-import easingFuncs from './easingfuncs';
-
-import {
-    Observer
-} from './observer';
-import {
-    generateRulerText
-} from './util';
-
-import Watcher from './watcher';
-
+import { Observer, Watcher } from './mvvm';
+import { generateRulerText, Vector2, easingFuncs } from './utilities';
 
 let SimpleSheet = function (el) {
     this.container = document.querySelector(el);
@@ -34,7 +24,6 @@ let SimpleSheet = function (el) {
     };
     this.observer = new Observer(this.layout);
 
-
     let tDiv = new Element('div', {
         style: {
             height: 50,
@@ -53,8 +42,6 @@ let SimpleSheet = function (el) {
     setInterval(() => {
         this.layout.tdiv = i++;
     }, 1000);
-
-
 
     let hRulerCells = new Div('ruler-cells', [].concat.apply([], Array(columns))
         .map((_, i) => new Div('ruler-cell', generateRulerText(i)))

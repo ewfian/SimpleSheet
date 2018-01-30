@@ -1,4 +1,4 @@
-export default function Vector2(x, y) {
+export function Vector2(x, y) {
     this.x = x || 0;
     this.y = y || 0;
 }
@@ -73,6 +73,6 @@ Vector2.prototype.init = function (x, y) {
     return this;
 };
 
-Vector2.prototype.getAngleDegrees = function(){
+Vector2.prototype.getAngleDegrees = function () {
     return Math.atan2(this.y, this.x) * 180 / Math.PI;
 };

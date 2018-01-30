@@ -1,4 +1,4 @@
-function Depend() {
+export function Depend() {
     this._subsQueue = [];
     this.id = (Math.random() + 1).toString(36).substring(2);
 }
@@ -25,5 +25,3 @@ Depend.prototype.destroy = function () {
 };
 
 Depend.target = null;
-
-export default Depend;

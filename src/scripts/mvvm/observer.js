@@ -1,8 +1,5 @@
-import Depend from './depend';
-import {
-    isArray,
-    isObject,
-} from './util';
+import { Depend } from './depend';
+import { isArray, isObject } from './../utilities';
 
 export function Observer(obj) {
     this.$observe = function (_obj) {

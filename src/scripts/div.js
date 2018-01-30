@@ -1,6 +1,5 @@
-import {inherits} from './util';
+import { inherits } from './utilities';
 import Element from './element';
-
 
 let Div = function (className, children, props) {
     Element.call(this, 'div', Object.assign({

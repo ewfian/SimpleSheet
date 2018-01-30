@@ -1,9 +1,7 @@
-import Depend from './depend';
-import {
-    isObject
-} from './util';
+import { Depend } from './depend';
+import { isObject } from './../utilities';
 
-function Watcher(model, expression, update) {
+export function Watcher(model, expression, update) {
     this.model = model;
     this.expression = expression;
     this.update = update;
@@ -20,7 +18,6 @@ Watcher.prototype.run = function () {
     this.update(newValue, oldValue);
 };
 
-
 let getValue = function (exp) {
     let exps = exp.split('.');
     return function (obj) {
@@ -33,6 +30,3 @@ let getValue = function (exp) {
         )) : obj;
     };
 };
-
-
-export default Watcher;

@@ -1,2 +1,2 @@
-export { Observer } from './observer';
+export { Mvvm } from './mvvm';
 export { Watcher } from './watcher';

@@ -22,13 +22,16 @@ let isObject = (object) => {
     return object && typeof object == 'object' &&
         (object == window || object instanceof Object);
 };
+let getPixelValue = (key, vaule) => {
+    return pixelValues.indexOf(key) > -1 && isNumeric(vaule) ? vaule + 'px' : vaule;
+};
 let setAttr = (node, key, value) => {
     switch (key) {
         case 'style':
             for (let st in value) {
                 if (value.hasOwnProperty(st)) {
                     let styleValue = value[st];
-                    node.style[st] = pixelValues.indexOf(st) > -1 && isNumeric(styleValue) ? styleValue + 'px' : styleValue;
+                    node.style[st] = getPixelValue(st, styleValue);
                 }
             }
             break;
@@ -71,6 +74,19 @@ let generateRulerText = function (index) {
     return letters.join('');
 };
 
+let parseExpression = exp => {
+    let exps = exp.split('.');
+    return obj => {
+        exps.forEach(key => {
+            obj = obj[key.trim()];
+        });
+        return isObject(obj) ? JSON.parse(JSON.stringify(obj, (key, value) =>
+            // https://stackoverflow.com/questions/4910567/hide-certain-values-in-output-from-json-stringify
+            key == '__observe__' ? undefined : value
+        )) : obj;
+    };
+};
+
 export {
     truthy,
     slice,
@@ -80,5 +96,7 @@ export {
     isObject,
     setAttr,
     inherits,
-    generateRulerText
+    generateRulerText,
+    parseExpression,
+    getPixelValue
 };

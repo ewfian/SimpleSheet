@@ -23,24 +23,32 @@ let SimpleSheet = function (el) {
         width: 50,
         height: 50,
         radius: '50%',
-        color: 'rgb(0, 200, 0)'
+        color: '#b4b4b4',
+        value: 'Test'
     };
     let mvvm = this.mvvm = new Mvvm(this.model);
 
     root.querySelector('.grid-bg').appendChild(new DynamicElement('div', {
         style: {
             position: 'absolute',
+            display: 'inline-block',
+            'text-align': 'center',
+            'z-index': 10,
+            top: mvvm.bindModel('width'),
+            left: mvvm.bindModel('height'),
             width: mvvm.bindModel('width'),
             height: mvvm.bindModel('height'),
+            'line-height': mvvm.bindModel('height'),
             'border-radius': mvvm.bindModel('radius'),
             'background-color': mvvm.bindModel('color'),
         }
-    }, 'tDiv').render());
+    }, mvvm.bindModel('color')).render());
     setInterval(() => {
         this.model.width = Math.random() * 200 + 50;
-        this.model.height = Math.random() * 200 + 50;
+        this.model.height = parseInt(Math.random() * 200 + 50);
         this.model.radius = Math.random() * 100 + '%';
         this.model.color = '#' + ((1 << 24) * Math.random() | 0).toString(16);
+        this.model.value = this.model.color;
     }, 500);
 
 

@@ -14,6 +14,18 @@ export default function DynamicElement(tagName, props, children) {
             }
         }
     }
+
+    if (isObject(children) && children.hasOwnProperty('__bind__')) {
+        this.watchers.push({
+            model: children.__bind__.model,
+            expression: children.expression,
+            update: function (newValue, oldValue) {
+                let value = typeof newValue === 'undefined' ? '' : newValue;
+                this.textContent = value;
+            }
+        });
+        this.children = [].concat(children.value || []);
+    }
 }
 
 inherits(DynamicElement, Element);
@@ -46,18 +58,21 @@ function parseBind(key, value) {
             }
             break;
         case 'value':
-            console.log('Not Implement');
-            // var tagName = node.tagName || '';
-            // tagName = tagName.toLowerCase();
-            // if (tagName === 'input' || tagName === 'textarea') {
-            //     node.value = value;
-            // } else {
-            //     node.setAttribute(key, value);
-            // }
-            break;
-        default:
-            console.log('Not Implement');
+            var tagName = this.tagName || '';
+            tagName = tagName.toLowerCase();
+            if (tagName === 'input' || tagName === 'textarea') {
+                if (value.hasOwnProperty('__bind__')) {
+                    this.props.value = value.value;
+                    this.watchers.push({
+                        model: value.__bind__.model,
+                        expression: value.expression,
+                        update: function (newValue, oldValue) {
+                            let value = typeof newValue === 'undefined' ? '' : newValue;
+                            this.value = value;
+                        }
+                    });
+                }
+            }
             break;
     }
-
 }

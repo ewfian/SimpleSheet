@@ -1,6 +1,6 @@
-import _ from './util';
+import * as _ from './utilities';
 
-function Element(tagName, props, children) {
+export default function Element(tagName, props, children) {
     if (!(this instanceof Element)) {
         if (!_.isArray(children) && children != null) {
             children = _.slice(arguments, 2).filter(_.truthy);
@@ -47,5 +47,3 @@ Element.prototype.render = function () {
 
     return el;
 };
-
-export default Element;

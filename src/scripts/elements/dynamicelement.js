@@ -1,8 +1,8 @@
-import { inherits, isObject, getPixelValue, setAttr } from './utilities';
-import Element from './element';
-import { Watcher } from './mvvm';
+import { inherits, isObject, getPixelValue, setAttr } from './../utilities';
+import { Element } from './element';
+import { Watcher } from './../mvvm';
 
-export default function DynamicElement(tagName, props, children) {
+export function DynamicElement(tagName, props, children) {
     Element.call(this, tagName, props, children);
     this.watchers = [];
 

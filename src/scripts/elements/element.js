@@ -1,6 +1,6 @@
-import * as _ from './utilities';
+import * as _ from './../utilities';
 
-export default function Element(tagName, props, children) {
+export function Element(tagName, props, children) {
     if (!(this instanceof Element)) {
         if (!_.isArray(children) && children != null) {
             children = _.slice(arguments, 2).filter(_.truthy);

@@ -1,4 +1,4 @@
-import { Vector2, easingFuncs } from './utilities';
+import { Vector2, easingFuncs } from './../utilities';
 
 export default function (scrollElement, verticalRuler, horizontalRuler) {
     let ticking = false;

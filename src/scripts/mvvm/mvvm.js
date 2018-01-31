@@ -17,3 +17,13 @@ Mvvm.prototype.bindModel = function (expression) {
         '$value': value
     } : null;
 };
+
+Mvvm.prototype.bindItem = function (key) {
+    let model = this.model;
+    return key ? {
+        '__bind__': {
+            model: model,
+        },
+        '$key': key,
+    } : null;
+};

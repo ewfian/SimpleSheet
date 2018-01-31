@@ -49,8 +49,9 @@ let SimpleSheet = function (el) {
     }, {
         class: 'ruler-cell',
         style: {
-            color: mvvm.bindModel('color')
-        }
+            width: mvvm.bindItem('width')
+        },
+        textContent: mvvm.bindItem('text')
     });
 
     //['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse']

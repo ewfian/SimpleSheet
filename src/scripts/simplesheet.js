@@ -13,8 +13,14 @@ let SimpleSheet = function (el) {
     this.model = {
         axis: {
             horizontal: [{
+                text: 'X',
+                width: 72
+            }, {
+                text: 'Y',
+                width: 20 //TODO
+            }, {
                 text: 'Z',
-                width: 20
+                width: 72
             }],
             vertical: []
         },
@@ -30,8 +36,6 @@ let SimpleSheet = function (el) {
             display: 'inline-block',
             'text-align': 'center',
             'z-index': 10,
-            // top: mvvm.bindModel('width'),
-            // left: mvvm.bindModel('height'),
             width: mvvm.bindModel('width'),
             height: mvvm.bindModel('height'),
             'line-height': mvvm.bindModel('height'),
@@ -43,27 +47,24 @@ let SimpleSheet = function (el) {
 
     let eList = new ElementList(mvvm.bindModel('axis.horizontal'), {
         class: 'ruler-cells',
-        style: {
-            left: mvvm.bindModel('width'),
-        }
+        style: { left: mvvm.bindModel('height') }
     }, {
         class: 'ruler-cell',
-        style: {
-            width: mvvm.bindItem('width')
-        },
+        style: { width: mvvm.bindItem('width') },
         textContent: mvvm.bindItem('text')
     });
 
     //['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse']
+    let i = 20;
     setInterval(() => {
         this.model.width = Math.random() * 200 + 50;
         this.model.height = parseInt(Math.random() * 200 + 50);
         this.model.color = '#' + ((1 << 24) * Math.random() | 0).toString(16);
-        this.model.axis.horizontal.push({
-            text: Math.floor(Math.random() * 10),
-            width: 40
-        });
-        this.model.axis.horizontal.shift();
+        // this.model.axis.horizontal.push({
+        //     text: Math.floor(Math.random() * 26),
+        //     width: i++
+        // });
+        // this.model.axis.horizontal.sort();
     }, 1000);
 
     let hRulerCells = new Div('ruler-cells', [].concat.apply([], Array(columns))

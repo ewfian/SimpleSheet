@@ -44,6 +44,9 @@ let setAttr = (node, key, value) => {
                 node.setAttribute(key, value);
             }
             break;
+        case 'textContent':
+            node.textContent = value;
+            break;
         default:
             node.setAttribute(key, value);
             break;
@@ -86,6 +89,13 @@ let parseExpression = exp => {
         )) : obj;
     };
 };
+let updateObjectbyPath = (_object, newValue, path) => {
+    let stack = path.split('.');
+    while (stack.length > 1) {
+        _object = _object[stack.shift()];
+    }
+    _object[stack.shift()] = newValue;
+};
 
 export {
     truthy,
@@ -98,5 +108,6 @@ export {
     inherits,
     generateRulerText,
     parseExpression,
-    getPixelValue
+    getPixelValue,
+    updateObjectbyPath
 };

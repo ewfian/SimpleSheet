@@ -58,10 +58,10 @@ function parseBind(bindKey, bindValue) {
             }
             break;
         case 'value':
-            var tagName = this.tagName || '';
-            tagName = tagName.toLowerCase();
-            if (tagName === 'input' || tagName === 'textarea') {
-                if (bindValue.hasOwnProperty('__bind__')) {
+            if (bindValue.hasOwnProperty('__bind__')) {
+                var tagName = this.tagName || '';
+                tagName = tagName.toLowerCase();
+                if (tagName === 'input' || tagName === 'textarea') {
                     this.props.value = bindValue.$value;
                     this.watchers.push({
                         model: bindValue.__bind__.model,
@@ -76,6 +76,7 @@ function parseBind(bindKey, bindValue) {
             break;
         case 'textContent':
             if (bindValue.hasOwnProperty('__bind__')) {
+                this.props[bindKey] = bindValue.$value;
                 this.watchers.push({
                     model: bindValue.__bind__.model,
                     expression: bindValue.$expression,
@@ -98,6 +99,5 @@ function parseBind(bindKey, bindValue) {
                     }
                 });
             }
-            break;
     }
 }

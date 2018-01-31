@@ -17,7 +17,6 @@ let SimpleSheet = function (el) {
         },
         width: 50,
         height: 50,
-        radius: '50%',
         color: '#b4b4b4',
         value: 'Test'
     };
@@ -29,28 +28,36 @@ let SimpleSheet = function (el) {
             display: 'inline-block',
             'text-align': 'center',
             'z-index': 10,
-            top: mvvm.bindModel('width'),
-            left: mvvm.bindModel('height'),
+            // top: mvvm.bindModel('width'),
+            // left: mvvm.bindModel('height'),
             width: mvvm.bindModel('width'),
             height: mvvm.bindModel('height'),
             'line-height': mvvm.bindModel('height'),
-            'border-radius': mvvm.bindModel('radius'),
             'background-color': mvvm.bindModel('color'),
         },
         class: mvvm.bindModel('width')
     }, mvvm.bindModel('color')).render());
 
-    let eList = new ElementList('div', { class: 'ruler-cell' }, mvvm.bindModel('axis.horizontal'));
+    let eList = new ElementList(mvvm.bindModel('axis.horizontal'), {
+        class: 'ruler-cells',
+        style: {
+            left: mvvm.bindModel('width'),
+        }
+    }, {
+        class: 'ruler-cell',
+        style: {
+            color: 'red'
+        }
+    });
 
     //['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse']
     setInterval(() => {
-        // this.model.width = Math.random() * 200 + 50;
-        // this.model.height = parseInt(Math.random() * 200 + 50);
-        // this.model.radius = Math.random() * 100 + '%';
-        // this.model.color = '#' + ((1 << 24) * Math.random() | 0).toString(16);
-        // this.model.value = this.model.color;
-        // this.model.axis.horizontal.push(parseInt(Math.random() * 10) + 1);
-        // this.model.axis.horizontal.shift();
+        this.model.width = Math.random() * 200 + 50;
+        this.model.height = parseInt(Math.random() * 200 + 50);
+        this.model.color = '#' + ((1 << 24) * Math.random() | 0).toString(16);
+        this.model.value = this.model.color;
+        this.model.axis.horizontal.push(parseInt(Math.random() * 10) + 1);
+        this.model.axis.horizontal.shift();
         this.model.axis.horizontal.push();
         this.model.axis.horizontal.unshift();
         this.model.axis.horizontal.reverse();

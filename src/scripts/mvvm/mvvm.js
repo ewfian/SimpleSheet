@@ -13,7 +13,7 @@ Mvvm.prototype.bindModel = function (expression) {
         '__bind__': {
             model: model,
         },
-        'expression': expression,
-        'value': value
+        '$expression': expression,
+        '$value': value
     } : null;
 };

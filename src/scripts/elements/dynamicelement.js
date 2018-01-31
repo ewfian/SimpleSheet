@@ -18,7 +18,7 @@ export function DynamicElement(tagName, props, children) {
     if (isObject(children) && children.hasOwnProperty('__bind__')) {
         this.watchers.push({
             model: children.__bind__.model,
-            expression: children.expression,
+            expression: children.$expression,
             update: function (newValue, oldValue) {
                 let value = typeof newValue === 'undefined' ? '' : newValue;
                 this.textContent = value;
@@ -44,10 +44,10 @@ function parseBind(key, value) {
                 if (value.hasOwnProperty(st)) {
                     let styleValue = value[st];
                     if (styleValue.hasOwnProperty('__bind__')) {
-                        value[st] = styleValue.value;
+                        value[st] = styleValue.$value;
                         this.watchers.push({
                             model: styleValue.__bind__.model,
-                            expression: styleValue.expression,
+                            expression: styleValue.$expression,
                             update: function (newValue, oldValue) {
                                 let value = typeof newValue === 'undefined' ? '' : newValue;
                                 this.style[st] = getPixelValue(st, value);
@@ -65,7 +65,7 @@ function parseBind(key, value) {
                     this.props.value = value.value;
                     this.watchers.push({
                         model: value.__bind__.model,
-                        expression: value.expression,
+                        expression: value.$expression,
                         update: function (newValue, oldValue) {
                             let value = typeof newValue === 'undefined' ? '' : newValue;
                             this.value = value;
@@ -79,7 +79,7 @@ function parseBind(key, value) {
                 this.props[key] = value.value;
                 this.watchers.push({
                     model: value.__bind__.model,
-                    expression: value.expression,
+                    expression: value.$expression,
                     update: function (newValue, oldValue) {
                         let value = typeof newValue === 'undefined' ? '' : newValue;
                         setAttr(this, key, value);

@@ -21,7 +21,7 @@ export function ElementList(tagName, props, bindModel) {
         update: function (newValue, oldValue, op, args) {
             switch (op) {
                 case 'push':
-                    this.appendChild(new DynamicElement('div', this._props, args[0]).render());
+                    if (args.length > 0) this.appendChild(new DynamicElement('div', this._props, args[0]).render());
                     break;
                 case 'shift':
                     if (this.hasChildNodes()) this.firstChild.remove();
@@ -30,7 +30,7 @@ export function ElementList(tagName, props, bindModel) {
                     if (this.hasChildNodes()) this.lastChild.remove();
                     break;
                 case 'unshift':
-                    this.insertBefore(new DynamicElement('div', this._props, args[0]).render(), this.firstChild);
+                    if (args.length > 0) this.insertBefore(new DynamicElement('div', this._props, args[0]).render(), this.firstChild);
                     break;
                 case 'reverse':
                     Array.prototype.slice.call(this.children)
@@ -39,16 +39,15 @@ export function ElementList(tagName, props, bindModel) {
                         .forEach(x => this.appendChild(x));
                     break;
                 case 'sort':
+                    var sortFunction = args[0] || ((curr, next) => curr - next);
                     Array.prototype.slice.call(this.children)
                         .map(x => this.removeChild(x))
-                        .sort((e1, e2) => args[0](e1.firstChild.textContent, e2.firstChild.textContent))
+                        .sort((e1, e2) => sortFunction(e1.firstChild.textContent, e2.firstChild.textContent))
                         .forEach(x => this.appendChild(x));
                     break;
                 case 'splice':
-                    var nodeList = Array.prototype.slice.call(this.children)
-                        .map(x => this.removeChild(x));
-                    if (args[2]) args[2] = new DynamicElement('div', this._props, args[2]).render();
-                    nodeList.splice(...args);
+                    var nodeList = Array.prototype.slice.call(this.children).map(x => this.removeChild(x));
+                    nodeList.splice(...[].slice.call(args, 0, 2), ...[].slice.call(args, 2).map(e => new DynamicElement('div', this._props, e).render()));
                     nodeList.forEach(x => this.appendChild(x));
                     break;
                 default:

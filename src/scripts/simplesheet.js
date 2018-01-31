@@ -44,18 +44,18 @@ let SimpleSheet = function (el) {
 
     //['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse']
     setInterval(() => {
-        this.model.width = Math.random() * 200 + 50;
-        this.model.height = parseInt(Math.random() * 200 + 50);
-        this.model.radius = Math.random() * 100 + '%';
-        this.model.color = '#' + ((1 << 24) * Math.random() | 0).toString(16);
-        this.model.value = this.model.color;
+        // this.model.width = Math.random() * 200 + 50;
+        // this.model.height = parseInt(Math.random() * 200 + 50);
+        // this.model.radius = Math.random() * 100 + '%';
+        // this.model.color = '#' + ((1 << 24) * Math.random() | 0).toString(16);
+        // this.model.value = this.model.color;
         // this.model.axis.horizontal.push(parseInt(Math.random() * 10) + 1);
         // this.model.axis.horizontal.shift();
-        // this.model.axis.horizontal.pop();
-        // this.model.axis.horizontal.unshift(parseInt(Math.random() * 10) + 1);
-        // this.model.axis.horizontal.reverse();
-        this.model.axis.horizontal.splice(2, 1, parseInt(Math.random() * 10) + 1);
-        // this.model.axis.horizontal.sort((a, b) => b > a);
+        this.model.axis.horizontal.push();
+        this.model.axis.horizontal.unshift();
+        this.model.axis.horizontal.reverse();
+        this.model.axis.horizontal.splice(2, 2, parseInt(Math.random() * 10), parseInt(Math.random() * 10));
+        this.model.axis.horizontal.sort((a, b) => b < a);
     }, 1000);
 
     let hRulerCells = new Div('ruler-cells', [].concat.apply([], Array(columns))

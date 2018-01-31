@@ -16,7 +16,7 @@ export function ElementList(bindModel, parentProps, props, parentTagName = 'div'
     this.watchers = [];
 
     bindModel.$value.forEach(model => {
-        this.elements.push(new DynamicElement(tagName, props, model));
+        this.elements.push(new DynamicElement(tagName, props, model.text));
     });
 
     this.watchers.push({
@@ -26,7 +26,7 @@ export function ElementList(bindModel, parentProps, props, parentTagName = 'div'
             switch (op) {
                 case 'push':
                     if (args.length > 0) {
-                        this.appendChild(new DynamicElement(this.tagName, this._props, args[0]).render());
+                        this.appendChild(new DynamicElement(this.tagName, this._props, args[0].text).render());
                     }
                     break;
                 case 'shift':
@@ -41,7 +41,7 @@ export function ElementList(bindModel, parentProps, props, parentTagName = 'div'
                     break;
                 case 'unshift':
                     if (args.length > 0) {
-                        this.insertBefore(new DynamicElement(this.tagName, this._props, args[0]).render(),
+                        this.insertBefore(new DynamicElement(this.tagName, this._props, args[0].text).render(),
                             this.firstChild);
                     }
                     break;
@@ -61,7 +61,7 @@ export function ElementList(bindModel, parentProps, props, parentTagName = 'div'
                 case 'splice':
                     var nodeList = Array.prototype.slice.call(this.children).map(x => this.removeChild(x));
                     nodeList.splice(...[].slice.call(args, 0, 2), ...[].slice.call(args, 2).map(e =>
-                        new DynamicElement(this.tagName, this._props, e).render()));
+                        new DynamicElement(this.tagName, this._props, e.text).render()));
                     nodeList.forEach(x => this.appendChild(x));
                     break;
                 default:

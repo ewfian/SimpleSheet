@@ -32,6 +32,9 @@ Element.prototype.render = function () {
 
     if (_.isObject(props)) {
         for (let propName in props) {
+            if (propName === 'textContent') {
+                continue;
+            }
             if (props.hasOwnProperty(propName)) {
                 let propValue = props[propName];
                 _.setAttr(el, propName, propValue);

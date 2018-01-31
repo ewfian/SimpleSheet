@@ -12,13 +12,15 @@ let SimpleSheet = function (el) {
 
     this.model = {
         axis: {
-            horizontal: ['A', 'B', 'C', 'D', 'E'],
+            horizontal: [{
+                text: 'Z',
+                width: 20
+            }],
             vertical: []
         },
         width: 50,
         height: 50,
-        color: '#b4b4b4',
-        value: 'Test'
+        color: '#b4b4b4'
     };
     let mvvm = this.mvvm = new Mvvm(this.model);
 
@@ -35,8 +37,9 @@ let SimpleSheet = function (el) {
             'line-height': mvvm.bindModel('height'),
             'background-color': mvvm.bindModel('color'),
         },
-        class: mvvm.bindModel('width')
-    }, mvvm.bindModel('color')).render());
+        class: mvvm.bindModel('color'),
+        textContent: mvvm.bindModel('color')
+    }).render());
 
     let eList = new ElementList(mvvm.bindModel('axis.horizontal'), {
         class: 'ruler-cells',
@@ -46,7 +49,7 @@ let SimpleSheet = function (el) {
     }, {
         class: 'ruler-cell',
         style: {
-            color: 'red'
+            color: mvvm.bindModel('color')
         }
     });
 
@@ -55,14 +58,11 @@ let SimpleSheet = function (el) {
         this.model.width = Math.random() * 200 + 50;
         this.model.height = parseInt(Math.random() * 200 + 50);
         this.model.color = '#' + ((1 << 24) * Math.random() | 0).toString(16);
-        this.model.value = this.model.color;
-        this.model.axis.horizontal.push(parseInt(Math.random() * 10) + 1);
+        this.model.axis.horizontal.push({
+            text: Math.floor(Math.random() * 10),
+            width: 40
+        });
         this.model.axis.horizontal.shift();
-        this.model.axis.horizontal.push();
-        this.model.axis.horizontal.unshift();
-        this.model.axis.horizontal.reverse();
-        this.model.axis.horizontal.splice(2, 2, parseInt(Math.random() * 10), parseInt(Math.random() * 10));
-        this.model.axis.horizontal.sort((a, b) => b < a);
     }, 1000);
 
     let hRulerCells = new Div('ruler-cells', [].concat.apply([], Array(columns))

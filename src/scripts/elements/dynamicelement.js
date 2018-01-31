@@ -2,7 +2,7 @@ import { inherits, isObject, getPixelValue, setAttr } from './../utilities';
 import { Element } from './element';
 import { Watcher } from './../mvvm';
 
-export function DynamicElement(tagName, props, children) {
+export function DynamicElement(tagName, props, children = []) {
     Element.call(this, tagName, props, children);
     this.watchers = [];
 
@@ -24,7 +24,7 @@ export function DynamicElement(tagName, props, children) {
                 this.textContent = value;
             }
         });
-        this.children = [].concat(children.value || []);
+        this.children = [].concat(children.$value);
     }
 }
 
@@ -37,14 +37,14 @@ DynamicElement.prototype.render = function () {
     return el;
 };
 
-function parseBind(key, value) {
-    switch (key) {
+function parseBind(bindKey, bindValue) {
+    switch (bindKey) {
         case 'style':
-            for (let st in value) {
-                if (value.hasOwnProperty(st)) {
-                    let styleValue = value[st];
+            for (let st in bindValue) {
+                if (bindValue.hasOwnProperty(st)) {
+                    let styleValue = bindValue[st];
                     if (styleValue.hasOwnProperty('__bind__')) {
-                        value[st] = styleValue.$value;
+                        bindValue[st] = styleValue.$value;
                         this.watchers.push({
                             model: styleValue.__bind__.model,
                             expression: styleValue.$expression,
@@ -61,11 +61,11 @@ function parseBind(key, value) {
             var tagName = this.tagName || '';
             tagName = tagName.toLowerCase();
             if (tagName === 'input' || tagName === 'textarea') {
-                if (value.hasOwnProperty('__bind__')) {
-                    this.props.value = value.value;
+                if (bindValue.hasOwnProperty('__bind__')) {
+                    this.props.value = bindValue.$value;
                     this.watchers.push({
-                        model: value.__bind__.model,
-                        expression: value.$expression,
+                        model: bindValue.__bind__.model,
+                        expression: bindValue.$expression,
                         update: function (newValue, oldValue) {
                             let value = typeof newValue === 'undefined' ? '' : newValue;
                             this.value = value;
@@ -74,15 +74,27 @@ function parseBind(key, value) {
                 }
             }
             break;
-        default:
-            if (value.hasOwnProperty('__bind__')) {
-                this.props[key] = value.value;
+        case 'textContent':
+            if (bindValue.hasOwnProperty('__bind__')) {
                 this.watchers.push({
-                    model: value.__bind__.model,
-                    expression: value.$expression,
+                    model: bindValue.__bind__.model,
+                    expression: bindValue.$expression,
                     update: function (newValue, oldValue) {
                         let value = typeof newValue === 'undefined' ? '' : newValue;
-                        setAttr(this, key, value);
+                        this.textContent = value;
+                    }
+                });
+            }
+            break;
+        default:
+            if (bindValue.hasOwnProperty('__bind__')) {
+                this.props[bindKey] = bindValue.$value;
+                this.watchers.push({
+                    model: bindValue.__bind__.model,
+                    expression: bindValue.$expression,
+                    update: function (newValue, oldValue) {
+                        let value = typeof newValue === 'undefined' ? '' : newValue;
+                        setAttr(this, bindKey, value);
                     }
                 });
             }

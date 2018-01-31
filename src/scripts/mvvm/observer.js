@@ -29,7 +29,7 @@ export function Observer(obj) {
                     value: function (newVal) {
                         var dep = _array.__observe__;
                         var re = arrayPrototype[method].apply(_array, arguments);
-                        dep.notify();
+                        dep.notify(method, arguments);
                         // console.log('arr notify', dep);
                         return re;
                     },

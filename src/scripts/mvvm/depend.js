@@ -7,9 +7,9 @@ Depend.prototype.addSub = function (callback) {
     this._subsQueue.push(callback);
 };
 
-Depend.prototype.notify = function () {
+Depend.prototype.notify = function (op, args) {
     this._subsQueue.forEach(function (call) {
-        call.run();
+        call.run(op, args);
     });
 };
 

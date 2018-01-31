@@ -6,25 +6,54 @@ export function ElementList(tagName, props, bindModel) {
     this.tagName = tagName;
     this.props = props;
     this.bindModel = bindModel;
-    this.model_array = bindModel.value;
     this.elements = [];
     this.watchers = [];
 
-    if (isArray(this.bindModel.value)) {
-        this.model_array.forEach(model => {
-            this.elements.push(new DynamicElement(this.tagName, this.props, model));
+    if (isArray(bindModel.value)) {
+        bindModel.value.forEach(model => {
+            this.elements.push(new DynamicElement(tagName, props, model));
         });
     }
 
     this.watchers.push({
         model: this.bindModel.__bind__.model,
         expression: this.bindModel.expression,
-        update: function (newValue, oldValue) {
-            let value = typeof newValue === 'undefined' ? '' : newValue;
-            this.innerHTML = '';
-            value.forEach(m => {
-                this.appendChild(new DynamicElement('div', this._props, m).render());
-            });
+        update: function (newValue, oldValue, op, args) {
+            switch (op) {
+                case 'push':
+                    this.appendChild(new DynamicElement('div', this._props, args[0]).render());
+                    break;
+                case 'shift':
+                    if (this.hasChildNodes()) this.firstChild.remove();
+                    break;
+                case 'pop':
+                    if (this.hasChildNodes()) this.lastChild.remove();
+                    break;
+                case 'unshift':
+                    this.insertBefore(new DynamicElement('div', this._props, args[0]).render(), this.firstChild);
+                    break;
+                case 'reverse':
+                    Array.prototype.slice.call(this.children)
+                        .map(x => this.removeChild(x))
+                        .reverse()
+                        .forEach(x => this.appendChild(x));
+                    break;
+                case 'sort':
+                    Array.prototype.slice.call(this.children)
+                        .map(x => this.removeChild(x))
+                        .sort((e1, e2) => args[0](e1.firstChild.textContent, e2.firstChild.textContent))
+                        .forEach(x => this.appendChild(x));
+                    break;
+                case 'splice':
+                    var nodeList = Array.prototype.slice.call(this.children)
+                        .map(x => this.removeChild(x));
+                    if (args[2]) args[2] = new DynamicElement('div', this._props, args[2]).render();
+                    nodeList.splice(...args);
+                    nodeList.forEach(x => this.appendChild(x));
+                    break;
+                default:
+                    throw 'NotImplementedException';
+            }
         }
     });
 }

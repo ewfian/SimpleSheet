@@ -40,16 +40,23 @@ let SimpleSheet = function (el) {
         class: mvvm.bindModel('width')
     }, mvvm.bindModel('color')).render());
 
-    let elist = new ElementList('div', { class: 'ruler-cell' }, mvvm.bindModel('axis.horizontal'));
+    let eList = new ElementList('div', { class: 'ruler-cell' }, mvvm.bindModel('axis.horizontal'));
+
+    //['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse']
     setInterval(() => {
         this.model.width = Math.random() * 200 + 50;
         this.model.height = parseInt(Math.random() * 200 + 50);
         this.model.radius = Math.random() * 100 + '%';
         this.model.color = '#' + ((1 << 24) * Math.random() | 0).toString(16);
         this.model.value = this.model.color;
-        this.model.axis.horizontal.push(parseInt(Math.random() * 10) + 1);
-        this.model.axis.horizontal.shift();
-    }, 500);
+        // this.model.axis.horizontal.push(parseInt(Math.random() * 10) + 1);
+        // this.model.axis.horizontal.shift();
+        // this.model.axis.horizontal.pop();
+        // this.model.axis.horizontal.unshift(parseInt(Math.random() * 10) + 1);
+        // this.model.axis.horizontal.reverse();
+        this.model.axis.horizontal.splice(2, 1, parseInt(Math.random() * 10) + 1);
+        // this.model.axis.horizontal.sort((a, b) => b > a);
+    }, 1000);
 
     let hRulerCells = new Div('ruler-cells', [].concat.apply([], Array(columns))
         .map((_, i) => new Div('ruler-cell', generateRulerText(i)))
@@ -82,7 +89,7 @@ let SimpleSheet = function (el) {
             });
         }));
 
-    root.querySelector('.horizontal-ruler').appendChild(elist.render());
+    root.querySelector('.horizontal-ruler').appendChild(eList.render());
     root.querySelector('.vertical-ruler').appendChild(vRulerCells.render());
 
     root.querySelector('.grid-bg').appendChild(hTableLines.render());

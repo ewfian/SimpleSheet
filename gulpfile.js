@@ -53,7 +53,6 @@ gulp.task('styles', function () {
     return gulp.src('src/scss/all.scss')
         .pipe(gulpif(!isBuildTask, sourcemaps.init()))
         .pipe(sass().on('error', sass.logError))
-        .on('error', sass.logError)
         .pipe(postcss(
             [
                 autoprefixer(browsersList),
@@ -94,7 +93,11 @@ gulp.task('scripts', function () {
     return b.bundle()
         .on('error', function (err) {
             console.error(err);
-            this.emit('end');
+            if (isBuildTask) {
+                process.exit(1);
+            } else {
+                this.emit('end');
+            }
         })
         .pipe(source('bundle.js'))
         .pipe(buffer())

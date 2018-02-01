@@ -1,7 +1,7 @@
 import { generateRulerText } from './utilities';
 import { Mvvm } from './mvvm';
 import { Element, Div, DynamicElement, ElementList } from './elements';
-import { default as tableScrollEvent } from './events/tableScrollEvent';
+import { default as tableScrollEvent } from './events/tablescrollevents';
 
 let SimpleSheet = function (el) {
     this.container = document.querySelector(el);

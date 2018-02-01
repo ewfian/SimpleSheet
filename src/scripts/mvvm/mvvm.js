@@ -8,11 +8,22 @@ export function Mvvm(model) {
 
 Mvvm.prototype.bindModel = function (expression) {
     let model = this.model;
-    return {
+    let value = parseExpression(expression)(this.model);
+    return value ? {
         '__bind__': {
             model: model,
         },
-        'expression': expression,
-        'value': parseExpression(expression)(this.model)
-    };
+        '$expression': expression,
+        '$value': value
+    } : null;
+};
+
+Mvvm.prototype.bindItem = function (key) {
+    let model = this.model;
+    return key ? {
+        '__bind__': {
+            model: model,
+        },
+        '$key': key,
+    } : null;
 };

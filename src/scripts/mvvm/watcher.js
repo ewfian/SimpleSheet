@@ -12,8 +12,8 @@ export function Watcher(model, expression, update) {
     Depend.target = null;
 }
 
-Watcher.prototype.run = function () {
+Watcher.prototype.run = function (op, args) {
     var oldValue = this.value;
     var newValue = this.value = this.getter(this.model);
-    this.update(newValue, oldValue);
+    this.update(newValue, oldValue, op, args);
 };

@@ -1,11 +1,7 @@
 import { generateRulerText } from './utilities';
 import { Mvvm } from './mvvm';
-
-import Element from './element';
-import Div from './div';
-import DynamicElement from './DynamicElement';
-
-import { default as tableScrollEvent } from './tableScrollEvent';
+import { Element, Div, DynamicElement, ElementList } from './elements';
+import { default as tableScrollEvent } from './events/tableScrollEvent';
 
 let SimpleSheet = function (el) {
     this.container = document.querySelector(el);
@@ -14,17 +10,23 @@ let SimpleSheet = function (el) {
         columns = 103;
     this.$options = {};
 
-
     this.model = {
         axis: {
-            horizontal: [],
+            horizontal: [{
+                text: 'X',
+                width: 72
+            }, {
+                text: 'Y',
+                width: 20 //TODO
+            }, {
+                text: 'Z',
+                width: 108
+            }],
             vertical: []
         },
         width: 50,
         height: 50,
-        radius: '50%',
-        color: '#b4b4b4',
-        value: 'Test'
+        color: '#b4b4b4'
     };
     let mvvm = this.mvvm = new Mvvm(this.model);
 
@@ -34,25 +36,35 @@ let SimpleSheet = function (el) {
             display: 'inline-block',
             'text-align': 'center',
             'z-index': 10,
-            top: mvvm.bindModel('width'),
-            left: mvvm.bindModel('height'),
             width: mvvm.bindModel('width'),
             height: mvvm.bindModel('height'),
             'line-height': mvvm.bindModel('height'),
-            'border-radius': mvvm.bindModel('radius'),
             'background-color': mvvm.bindModel('color'),
-        }
-    }, mvvm.bindModel('color')).render());
+        },
+        class: mvvm.bindModel('color'),
+        textContent: mvvm.bindModel('color')
+    }).render());
+
+    let eList = new ElementList(mvvm.bindModel('axis.horizontal'), {
+        class: 'ruler-cells',
+        style: { left: mvvm.bindModel('height') }
+    }, {
+        class: 'ruler-cell',
+        style: { width: mvvm.bindItem('width') },
+        textContent: mvvm.bindItem('text')
+    });
+
+    //['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse']
     setInterval(() => {
         this.model.width = Math.random() * 200 + 50;
         this.model.height = parseInt(Math.random() * 200 + 50);
-        this.model.radius = Math.random() * 100 + '%';
         this.model.color = '#' + ((1 << 24) * Math.random() | 0).toString(16);
-        this.model.value = this.model.color;
-    }, 500);
-
-
-
+        this.model.axis.horizontal.push({
+            text: Math.floor(Math.random() * 26),
+            width: Math.floor(Math.random() * 100)
+        });
+        this.model.axis.horizontal.shift();
+    }, 1000);
 
     let hRulerCells = new Div('ruler-cells', [].concat.apply([], Array(columns))
         .map((_, i) => new Div('ruler-cell', generateRulerText(i)))
@@ -85,7 +97,7 @@ let SimpleSheet = function (el) {
             });
         }));
 
-    root.querySelector('.horizontal-ruler').appendChild(hRulerCells.render());
+    root.querySelector('.horizontal-ruler').appendChild(eList.render());
     root.querySelector('.vertical-ruler').appendChild(vRulerCells.render());
 
     root.querySelector('.grid-bg').appendChild(hTableLines.render());

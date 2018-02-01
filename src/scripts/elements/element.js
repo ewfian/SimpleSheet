@@ -1,6 +1,6 @@
-import * as _ from './utilities';
+import * as _ from './../utilities';
 
-export default function Element(tagName, props, children) {
+export function Element(tagName, props, children = []) {
     if (!(this instanceof Element)) {
         if (!_.isArray(children) && children != null) {
             children = _.slice(arguments, 2).filter(_.truthy);
@@ -8,14 +8,14 @@ export default function Element(tagName, props, children) {
         return new Element(tagName, props, children);
     }
 
-    if (!_.isObject(props) || _.isArray(props)) {
+    if (!_.isObject(props) && _.isArray(props)) {
         children = props;
         props = {};
     }
 
     this.tagName = tagName;
     this.props = props || {};
-    this.children = _.isArray(children) ? children : [].concat(children || []);
+    this.children = _.isArray(children) ? children : [].concat(children);
 }
 
 Element.prototype.appendChild = function (child) {

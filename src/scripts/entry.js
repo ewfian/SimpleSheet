@@ -1,4 +1,4 @@
-import './polyfill';
+import './utilities/polyfill';
 import SimpleSheet from './simplesheet';
 
 if (!window.SimpleSheet) {

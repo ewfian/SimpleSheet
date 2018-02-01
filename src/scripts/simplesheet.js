@@ -55,14 +55,13 @@ let SimpleSheet = function (el) {
     });
 
     //['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse']
-    let i = 20;
     setInterval(() => {
         this.model.width = Math.random() * 200 + 50;
         this.model.height = parseInt(Math.random() * 200 + 50);
         this.model.color = '#' + ((1 << 24) * Math.random() | 0).toString(16);
         this.model.axis.horizontal.push({
             text: Math.floor(Math.random() * 26),
-            width: i++
+            width: Math.floor(Math.random() * 100)
         });
         this.model.axis.horizontal.shift();
     }, 1000);

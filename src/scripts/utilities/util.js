@@ -77,19 +77,22 @@ let generateRulerText = function (index) {
     return letters.join('');
 };
 
+let deepCopyBoundProps = obj => JSON.parse(JSON.stringify(obj, (key, value) =>
+    // https://stackoverflow.com/questions/4910567/hide-certain-values-in-output-from-json-stringify
+    key == '__observe__' ? undefined : value
+));
+
 let parseExpression = exp => {
     let exps = exp.split('.');
     return obj => {
         exps.forEach(key => {
             obj = obj[key.trim()];
         });
-        return isObject(obj) ? JSON.parse(JSON.stringify(obj, (key, value) =>
-            // https://stackoverflow.com/questions/4910567/hide-certain-values-in-output-from-json-stringify
-            key == '__observe__' ? undefined : value
-        )) : obj;
+        return isObject(obj) ? deepCopyBoundProps(obj) : obj;
     };
 };
-let updateObjectbyPath = (_object, newValue, path) => {
+
+let updateObjectByPath = (_object, newValue, path) => {
     let stack = path.split('.');
     while (stack.length > 1) {
         _object = _object[stack.shift()];
@@ -109,5 +112,6 @@ export {
     generateRulerText,
     parseExpression,
     getPixelValue,
-    updateObjectbyPath
+    updateObjectByPath,
+    deepCopyBoundProps
 };

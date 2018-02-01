@@ -1,5 +1,5 @@
 import { Watcher } from './../mvvm';
-import { isArray, isObject, updateObjectbyPath } from '../utilities';
+import { isArray, isObject, updateObjectByPath, deepCopyBoundProps } from '../utilities';
 import { DynamicElement } from './DynamicElement';
 
 export function ElementList(bindModel, parentProps, props, parentTagName = 'div', tagName = 'div') {
@@ -12,7 +12,7 @@ export function ElementList(bindModel, parentProps, props, parentTagName = 'div'
     this.parentTagName = parentTagName;
     this.tagName = tagName;
 
-    this.bindTempletes = [];
+    this.bindTemplates = [];
     this.elements = [];
     this.watchers = [];
 
@@ -26,10 +26,11 @@ export function ElementList(bindModel, parentProps, props, parentTagName = 'div'
     }
 
     bindModel.$value.forEach(model => {
-        this.bindTempletes.forEach(
-            tmpl => updateObjectbyPath(props, model[tmpl.key], tmpl.path)
+        let boundProps = deepCopyBoundProps(props);
+        this.bindTemplates.forEach(
+            temp => updateObjectByPath(boundProps, model[temp.key], temp.path)
         );
-        this.elements.push(new DynamicElement(tagName, Object.assign({}, props)));
+        this.elements.push(new DynamicElement(tagName, boundProps));
     });
 
     this.watchers.push({
@@ -39,8 +40,8 @@ export function ElementList(bindModel, parentProps, props, parentTagName = 'div'
             let insertNode = null;
 
             if (['push', 'unshift'].indexOf(op) > -1 && args.length > 0) {
-                this._bindTempletes.forEach(
-                    tmpl => updateObjectbyPath(this._props, args[0][tmpl.key], tmpl.path)
+                this._bindTemplates.forEach(
+                    temp => updateObjectByPath(this._props, args[0][temp.key], temp.path)
                 );
                 insertNode = new DynamicElement(this.tagName, this._props).render();
             }
@@ -74,20 +75,20 @@ export function ElementList(bindModel, parentProps, props, parentTagName = 'div'
                 case 'splice':
                     var nodeList = Array.prototype.slice.call(this.children).map(x => this.removeChild(x));
                     nodeList.splice(...[].slice.call(args, 0, 2), ...[].slice.call(args, 2).map(e => {
-                        this._bindTempletes.forEach(
-                            tmpl => updateObjectbyPath(this._props, e[tmpl.key], tmpl.path)
+                        this._bindTemplates.forEach(
+                            temp => updateObjectByPath(this._props, e[temp.key], temp.path)
                         );
                         return new DynamicElement(this.tagName, this._props).render();
                     }));
                     nodeList.forEach(x => this.appendChild(x));
                     break;
-                // case 'sort':
-                //     var sortFunction = args[0] || ((curr, next) => curr.textContent - next.textContent);
-                //     Array.prototype.slice.call(this.children)
-                //         .map(x => this.removeChild(x))
-                //         .sort((e1, e2) => sortFunction(e1.firstChild, e2.firstChild))
-                //         .forEach(x => this.appendChild(x));
-                //     break;
+                    // case 'sort':
+                    //     var sortFunction = args[0] || ((curr, next) => curr.textContent - next.textContent);
+                    //     Array.prototype.slice.call(this.children)
+                    //         .map(x => this.removeChild(x))
+                    //         .sort((e1, e2) => sortFunction(e1.firstChild, e2.firstChild))
+                    //         .forEach(x => this.appendChild(x));
+                    //     break;
                 default:
                     throw 'NotImplementedException';
             }
@@ -100,7 +101,7 @@ function parseBind(bindKey, bindValue) {
         case 'style':
             for (let st in bindValue) {
                 if (bindValue.hasOwnProperty(st)) {
-                    this.bindTempletes.push({
+                    this.bindTemplates.push({
                         path: `${bindKey}.${st}`,
                         key: bindValue[st].$key
                     });
@@ -109,7 +110,7 @@ function parseBind(bindKey, bindValue) {
             break;
         default:
             if (bindValue.hasOwnProperty('__bind__')) {
-                this.bindTempletes.push({
+                this.bindTemplates.push({
                     path: bindKey,
                     key: bindValue.$key
                 });
@@ -120,7 +121,7 @@ function parseBind(bindKey, bindValue) {
 ElementList.prototype.render = function () {
     let el = new DynamicElement(this.parentTagName, this.parentProps, this.elements).render();
     el._props = this.props;
-    el._bindTempletes = this.bindTempletes;
+    el._bindTemplates = this.bindTemplates;
     this.watchers.forEach(w => el._watchers.push(new Watcher(w.model, w.expression, w.update.bind(el))));
     return el;
 };

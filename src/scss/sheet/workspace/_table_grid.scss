@@ -4,19 +4,26 @@
     position: relative;
     background-color: $table-grid-cell-bg-color;
     .grid-bg {
-        .h-lines .line {
-            left: 0;
-            height: 18px;
-            border-bottom: 1px solid $table-grid-cell-border-color;
-        }
-        .v-lines .line {
-            top: 0;
-            width: 72px;
-            border-right: 1px solid $table-grid-cell-border-color;
-        }
-        .line {
+        position: relative;
+        cursor: cell;
+        .h-lines {
             position: absolute;
-            cursor: cell;
+            .line {
+                flex-grow: 1;
+                flex-shrink: 0;
+                left: 0;
+                border-bottom: 1px solid $table-grid-cell-border-color;
+            }
+        }
+        .v-lines {
+            position: absolute;
+            display: flex;
+            .line {
+                flex-grow: 1;
+                flex-shrink: 0;
+                top: 0;
+                border-right: 1px solid $table-grid-cell-border-color;
+            }
         }
     }
 }

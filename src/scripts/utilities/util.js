@@ -100,6 +100,8 @@ let updateObjectByPath = (_object, newValue, path) => {
     _object[stack.shift()] = newValue;
 };
 
+let runNTimes = (n, f) => { let i = 0; while (n-- > 0) f(i++); };
+
 export {
     truthy,
     slice,
@@ -113,5 +115,6 @@ export {
     parseExpression,
     getPixelValue,
     updateObjectByPath,
-    deepCopyBoundProps
+    deepCopyBoundProps,
+    runNTimes
 };

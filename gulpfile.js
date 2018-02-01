@@ -52,7 +52,14 @@ gulp.task('server', function () {
 gulp.task('styles', function () {
     return gulp.src('src/scss/all.scss')
         .pipe(gulpif(!isBuildTask, sourcemaps.init()))
-        .pipe(sass().on('error', sass.logError))
+        .pipe(sass().on('error', (err) => {
+            if (isBuildTask) {
+                console.error(err);
+                process.exit(1);
+            } else {
+                sass.logError(err);
+            }
+        }))
         .on('error', sass.logError)
         .pipe(postcss(
             [
@@ -94,7 +101,11 @@ gulp.task('scripts', function () {
     return b.bundle()
         .on('error', function (err) {
             console.error(err);
-            this.emit('end');
+            if (isBuildTask) {
+                process.exit(1);
+            } else {
+                this.emit('end');
+            }
         })
         .pipe(source('bundle.js'))
         .pipe(buffer())

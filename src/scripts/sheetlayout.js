@@ -17,9 +17,8 @@ export function SheetLayout(root, rows = 96, columns = 103, rowHeight = 18, colu
             vertical: []
         },
         grid: {
-            width: 1,
-            height: 1
-            //TODO : cannot equals 0
+            width: 0,
+            height: 0
         }
     };
 

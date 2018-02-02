@@ -20,6 +20,7 @@ export function SimpleSheet(el) {
         text: '1'
     });
 
+    let i = 10;
     setInterval(() => {
         sheetLayout.viewModel.axis.horizontal.splice(2, 1, {
             width: Math.floor(Math.random() * 200 + 20),
@@ -29,6 +30,7 @@ export function SimpleSheet(el) {
             height: Math.floor(Math.random() * 100 + 30),
             text: Math.floor(Math.random() * 100)
         });
+        sheetLayout.viewModel._proxy.axis.horizontal[1].width = i++;
     }, 1000);
 
     tableScrollEvent(root.querySelector('.table-grid'), root.querySelector('.vertical-ruler'), root.querySelector('.horizontal-ruler .ruler-cells'));

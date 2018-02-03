@@ -56,21 +56,19 @@ let proxyDep = null;
 var handler = {
     get(target, key) {
         if (typeof target[key] === 'object' && target[key] !== null) {
-            return (function () {
-                proxyDep = new Depend();
-                return new Proxy(target[key], handler);
-            })();
+            return new Proxy(target[key], handler);
         } else {
+            proxyDep = new Depend();
             var dependTarget = Depend.target;
             if (dependTarget) {
                 proxyDep.addSub(dependTarget);
-                console.log(target,key);
             }
             return target[key];
         }
     },
     set(target, key, value) {
-        console.log(target, key, value);
+        target[key] = value;
+        proxyDep.notify('proxy', arguments);
         return true;
     }
 };

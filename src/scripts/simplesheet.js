@@ -31,13 +31,24 @@ export function SimpleSheet(el) {
     //         height: Math.floor(Math.random() * 100 + 30),
     //         text: Math.floor(Math.random() * 100)
     //     });
-    //     // sheetLayout.viewModel._proxy.axis.horizontal[1].width = i++;
+    //     // sheetLayout.viewModel._proxy.axis.horizontal[0].width = i++;
     // }, 1000);
 
-    new Watcher(sheetLayout.viewModel._proxy, 'axis.horizontal.0', () => {
-        console.log('object');
+    //     sheetLayout.viewModel.axis.horizontal.splice(2, 1, {
+    //         width: Math.floor(Math.random() * 200 + 20),
+    //         text: generateRulerText(Math.floor(Math.random() * 2000))
+    //     });
+
+    new Watcher(sheetLayout.viewModel._proxy, 'axis.horizontal.0', (newValue, oldValue, op, args) => {
+        console.log('cb', newValue, oldValue, op, args);
     });
-    console.log(sheetLayout.viewModel._proxy);
+
+    sheetLayout.viewModel.axis.horizontal.splice(2, 1, {
+        width: Math.floor(Math.random() * 200 + 20),
+        text: generateRulerText(Math.floor(Math.random() * 2000))
+    });
+
+    sheetLayout.viewModel._proxy.axis.horizontal[0].width = 125;
 
     tableScrollEvent(root.querySelector('.table-grid'), root.querySelector('.vertical-ruler'), root.querySelector('.horizontal-ruler .ruler-cells'));
 }

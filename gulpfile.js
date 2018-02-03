@@ -2,7 +2,6 @@
 var gulp = require('gulp'),
     sass = require('gulp-sass'),
     sequence = require('gulp-sequence'),
-    print = require('gulp-print'),
     replace = require('gulp-replace'),
     gulpif = require('gulp-if'),
     del = require('del'),
@@ -10,6 +9,7 @@ var gulp = require('gulp'),
     browserSync = require('browser-sync').create(),
     sourcemaps = require('gulp-sourcemaps'),
     md5 = require('gulp-md5-plus'),
+    // print = require('gulp-print'),
 
     postcss = require('gulp-postcss'),
     autoprefixer = require('autoprefixer'),
@@ -59,7 +59,7 @@ gulp.task('styles', function () {
                 cssnano()
             ]
         ))
-        .pipe(print())
+        // .pipe(print())
         // .pipe(concat('all.css'))
         .pipe(rename({
             suffix: '.min'
@@ -101,7 +101,7 @@ gulp.task('scripts', function () {
         })
         .pipe(source('bundle.js'))
         .pipe(buffer())
-        .pipe(print())
+        // .pipe(print())
         .pipe(gulpif(!isBuildTask, sourcemaps.init({
             loadMaps: true
         }))) //[loadMaps: true] must be enabled

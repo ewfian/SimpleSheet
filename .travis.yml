@@ -1,6 +1,10 @@
 language: node_js
 node_js: stable
 
+cache:
+  directories:
+    - $HOME/.npm
+
 install:
   - npm install
 

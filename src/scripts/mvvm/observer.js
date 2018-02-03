@@ -42,7 +42,38 @@ export function Observer(obj) {
     };
 
     this.$observe(obj);
+    // https://github.com/GoogleChrome/proxy-polyfill/issues/37
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/seal
+    // The Object.seal() method seals an object, preventing new properties from being added to it and
+    // marking all existing properties as non-configurable. Values of present properties can still be
+    // changed as long as they are writable.
+    // Objects sealed with Object.seal() can have their existing properties changed.
+    obj._proxy = null;
+    obj._proxy = new Proxy(obj, handler);
 }
+
+let proxyDep = null;
+var handler = {
+    get(target, key) {
+        if (typeof target[key] === 'object' && target[key] !== null) {
+            return (function () {
+                proxyDep = new Depend();
+                return new Proxy(target[key], handler);
+            })();
+        } else {
+            var dependTarget = Depend.target;
+            if (dependTarget) {
+                proxyDep.addSub(dependTarget);
+                console.log(target,key);
+            }
+            return target[key];
+        }
+    },
+    set(target, key, value) {
+        console.log(target, key, value);
+        return true;
+    }
+};
 
 var addObserve = function (val) {
     if (!val || !isObject(val)) {

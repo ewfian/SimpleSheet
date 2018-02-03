@@ -1,6 +1,7 @@
 import { generateRulerText, runNTimes } from './utilities';
 import { ElementList } from './elements';
 import { Mvvm } from './mvvm';
+import { Watcher } from './mvvm/watcher';
 
 export function SheetLayout(root, rows = 96, columns = 103, rowHeight = 18, columnWidth = 72) {
     this._options = {
@@ -16,12 +17,18 @@ export function SheetLayout(root, rows = 96, columns = 103, rowHeight = 18, colu
             vertical: []
         },
         grid: {
-            width: 1,
-            height: 1
-            //TODO : cannot equals 0
+            width: 0,
+            height: 0
         }
     };
-    let mvvm = this.mvvm = new Mvvm(this.viewModel);
+
+    this.mvvm = new Mvvm(this.viewModel);
+    this.root = root;
+}
+
+SheetLayout.prototype.initBind = function () {
+    let mvvm = this.mvvm;
+    let root = this.root;
 
     let hRulerCells = new ElementList(mvvm.bindModel('axis.horizontal'), { class: 'ruler-cells' }, {
         class: 'ruler-cell',
@@ -64,11 +71,16 @@ export function SheetLayout(root, rows = 96, columns = 103, rowHeight = 18, colu
 
     root.querySelector('.grid-bg').appendChild(hTableLines);
     root.querySelector('.grid-bg').appendChild(vTableLines);
+};
 
-}
 SheetLayout.prototype.initModel = function () {
     let model = this.viewModel;
     let options = this._options;
+
+    new Watcher(model, 'axis', () => {
+        model.grid.width = model.axis.horizontal.map(h => h.width).reduce((acc, curr) => acc + curr, 0);
+        model.grid.height = model.axis.vertical.map(v => v.height).reduce((acc, curr) => acc + curr, 0);
+    });
 
     runNTimes(options.columns, (i) => {
         model.axis.horizontal.push({
@@ -77,25 +89,10 @@ SheetLayout.prototype.initModel = function () {
         });
     });
 
-    model.axis.horizontal.shift();
-    model.axis.horizontal.unshift({
-        width: 200,
-        text: 'A'
-    });
-
     runNTimes(options.rows, (i) => {
         model.axis.vertical.push({
             height: options.rowHeight,
             text: i + 1
         });
     });
-
-    model.axis.vertical.shift();
-    model.axis.vertical.unshift({
-        height: 200,
-        text: '1'
-    });
-
-    model.grid.width = model.axis.horizontal.map(h => h.width).reduce((acc, curr) => acc + curr);
-    model.grid.height = model.axis.vertical.map(v => v.height).reduce((acc, curr) => acc + curr);
 };

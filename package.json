@@ -6,17 +6,17 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "build": "gulp build",
-        "watch": "gulp watch",
+        "prestart": "npm install",
         "start": "gulp watch"
     },
     "author": "EchoFan",
     "devDependencies": {
-        "autoprefixer": "^7.2.6",
+        "autoprefixer": "^8.0.0",
         "babel-cli": "^6.26.0",
         "babel-preset-env": "^1.6.1",
         "babelify": "^8.0.0",
         "browser-sync": "^2.23.6",
-        "browserify": "^16.0.0",
+        "browserify": "^16.1.0",
         "cssnano": "^3.10.0",
         "cz-conventional-changelog": "^2.1.0",
         "del": "^3.0.0",
@@ -39,8 +39,5 @@
         "commitizen": {
             "path": "./node_modules/cz-conventional-changelog"
         }
-    },
-    "dependencies": {
-        "proxy-polyfill": "^0.1.7"
     }
 }

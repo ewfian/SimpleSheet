@@ -4,7 +4,8 @@ import { isArray, isObject } from './../utilities';
 export function Observer(obj) {
     this.$observe = function (_obj) {
         if (isArray(_obj)) {
-            this.$cloneArray(_obj);
+            this.$observeArray(_obj);
+            _obj.__ob__ = this;
         } else if (isObject(_obj)) {
             this.$observeObj(_obj);
         }
@@ -20,7 +21,13 @@ export function Observer(obj) {
         }
     };
 
-    this.$cloneArray = function (_array) {
+    this.$observeArrayItem = function (_array) {
+        for (let i = 0, l = _array.length; i < l; i++) {
+            this.$observeObj(_array[i]);
+        }
+    };
+
+    this.$observeArray = function (_array) {
         var arrayPrototype = Array.prototype;
         var newPrototype = Object.create(arrayPrototype);
         ['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'].forEach(
@@ -29,6 +36,18 @@ export function Observer(obj) {
                     value: function (newVal) {
                         var dep = _array.__observe__;
                         var re = arrayPrototype[method].apply(_array, arguments);
+
+                        let inserted = null;
+                        switch (method) {
+                            case 'push':
+                            case 'unshift':
+                                inserted = Array.from(arguments);
+                                break;
+                            case 'splice':
+                                inserted = [].slice.call(arguments, 2);
+                                break;
+                        }
+                        if (inserted) _array.__ob__.$observeArrayItem(inserted);
                         dep.notify(method, arguments);
                         // console.log('arr notify', dep);
                         return re;
@@ -42,36 +61,7 @@ export function Observer(obj) {
     };
 
     this.$observe(obj);
-    // https://github.com/GoogleChrome/proxy-polyfill/issues/37
-    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/seal
-    // The Object.seal() method seals an object, preventing new properties from being added to it and
-    // marking all existing properties as non-configurable. Values of present properties can still be
-    // changed as long as they are writable.
-    // Objects sealed with Object.seal() can have their existing properties changed.
-    obj._proxy = null;
-    obj._proxy = new Proxy(obj, handler);
 }
-
-let proxyDep = null;
-var handler = {
-    get(target, key) {
-        if (typeof target[key] === 'object' && target[key] !== null) {
-            return new Proxy(target[key], handler);
-        } else {
-            proxyDep = new Depend();
-            var dependTarget = Depend.target;
-            if (dependTarget) {
-                proxyDep.addSub(dependTarget);
-            }
-            return target[key];
-        }
-    },
-    set(target, key, value) {
-        target[key] = value;
-        proxyDep.notify('proxy', arguments);
-        return true;
-    }
-};
 
 var addObserve = function (val) {
     if (!val || !isObject(val)) {
@@ -99,10 +89,14 @@ function defineProperty(obj, prop, val) {
             var target = Depend.target;
             if (target) {
                 dep.addSub(target);
+                console.log('dep.addSub', obj, prop, target.expression);
+
                 if (childDep) {
                     childDep.addSub(target);
+                    console.log('childDep.addSub', obj, prop, target.expression);
                 }
             }
+
             return val;
         },
         set: function (newVal) {

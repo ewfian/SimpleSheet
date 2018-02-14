@@ -1,6 +1,6 @@
 export function Depend() {
     this._subsQueue = [];
-    this.id = (Math.random() + 1).toString(36).substring(2);
+    // this.depend_id = (Math.random() + 1).toString(36).substring(2);
 }
 
 Depend.prototype.addSub = function (callback) {

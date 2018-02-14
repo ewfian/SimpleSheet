@@ -2,6 +2,8 @@ import { Depend } from './depend';
 import { parseExpression } from './../utilities';
 
 export function Watcher(model, expression, update) {
+    this.watcher_id = (Math.random() + 1).toString(36).substring(2);
+
     this.model = model;
     this.expression = expression;
     this.update = update;

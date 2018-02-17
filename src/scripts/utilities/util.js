@@ -1,26 +1,17 @@
 const pixelValues = ['background-position-x', 'background-position-y', 'background-repeat-x', 'background-repeat-y', 'baseline-shift', 'border-bottom-left-radius', 'border-bottom-right-radius', 'border-bottom-width', 'border-image-width', 'border-left-width', 'border-radius', 'border-right-width', 'border-spacing', 'border-top-left-radius', 'border-top-right-radius', 'border-top-width', 'border-width', 'bottom', 'font-size', 'height', 'left', 'letter-spacing', 'line-height', 'margin', 'margin-bottom', 'margin-left', 'margin-right', 'margin-top', 'max-height', 'max-width', 'min-height', 'min-width', 'outline-offset', 'outline-width', 'overflow-x', 'overflow-y', 'padding', 'padding-bottom', 'padding-left', 'padding-right', 'padding-top', 'right', 'stroke-width', 'text-indent', 'text-line-through-width', 'text-overline-width', 'text-underline-width', 'top', 'width', 'word-spacing'];
 
-let type = (obj) => {
+let getType = (obj) => {
     return Object.prototype.toString.call(obj).replace(/\[object\s|\]/g, '');
-};
-let slice = (arrayLike, index) => {
-    return Array.prototype.slice.call(arrayLike, index);
 };
 let truthy = (value) => {
     return !!value;
 };
-let isArray = (object) => {
-    return type(object) === 'Array';
+let isNumeric = (obj) => {
+    return !isNaN(parseFloat(obj)) && isFinite(obj);
 };
-let isString = (object) => {
-    return type(object) === 'String';
-};
-let isNumeric = (object) => {
-    return !isNaN(parseFloat(object)) && isFinite(object);
-};
-let isObject = (object) => {
-    return object && typeof object == 'object' &&
-        (object == window || object instanceof Object);
+let isObject = (obj) => {
+    return obj && typeof obj == 'object' &&
+        (obj == window || obj instanceof Object);
 };
 let getPixelValue = (key, vaule) => {
     return pixelValues.indexOf(key) > -1 && isNumeric(vaule) ? vaule + 'px' : vaule;
@@ -88,7 +79,8 @@ let parseExpression = exp => {
         exps.forEach(key => {
             obj = obj[key.trim()];
         });
-        return isObject(obj) ? deepCopyBoundProps(obj) : obj;
+        // return isObject(obj) ? deepCopyBoundProps(obj) : obj;
+        return obj;
     };
 };
 
@@ -102,11 +94,40 @@ let updateObjectByPath = (_object, newValue, path) => {
 
 let runNTimes = (n, f) => { let i = 0; while (n-- > 0) f(i++); };
 
+let def = (obj, key, val, enumerable) => {
+    Object.defineProperty(obj, key, {
+        value: val,
+        enumerable: !!enumerable,
+        configurable: true,
+        writable: true
+    });
+};
+
+// can we use __proto__?
+let hasProto = '__proto__' in {};
+
+/**
+ * Augment an target Object or Array by intercepting
+ * the prototype chain using __proto__
+ */
+let protoAugment = (target, src) => {
+    target.__proto__ = src;
+};
+
+/**
+ * Augment an target Object or Array by defining
+ * hidden properties.
+ */
+let copyAugment = (target, src, keys) => {
+    for (let i = 0, l = keys.length; i < l; i++) {
+        let key = keys[i];
+        def(target, key, src[key]);
+    }
+};
+
 export {
     truthy,
-    slice,
-    isArray,
-    isString,
+    getType,
     isNumeric,
     isObject,
     setAttr,
@@ -116,5 +137,9 @@ export {
     getPixelValue,
     updateObjectByPath,
     deepCopyBoundProps,
-    runNTimes
+    runNTimes,
+    def,
+    hasProto,
+    protoAugment,
+    copyAugment
 };

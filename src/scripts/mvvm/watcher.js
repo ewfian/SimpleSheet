@@ -1,5 +1,5 @@
 import { Depend } from './depend';
-import { parseExpression } from './../utilities';
+import { parseExpression, deepCopyBoundProps } from './../utilities';
 
 export function Watcher(model, expression, update) {
     this.watcher_id = (Math.random() + 1).toString(36).substring(2);
@@ -10,12 +10,12 @@ export function Watcher(model, expression, update) {
     this.getter = parseExpression(expression);
 
     Depend.target = this;
-    this.value = this.getter(model);
+    this.value = deepCopyBoundProps(this.getter(model));
     Depend.target = null;
 }
 
 Watcher.prototype.run = function (op, args) {
     var oldValue = this.value;
-    var newValue = this.value = this.getter(this.model);
+    var newValue = this.value = deepCopyBoundProps(this.getter(this.model));
     this.update(newValue, oldValue, op, args);
 };

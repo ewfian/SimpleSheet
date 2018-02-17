@@ -105,7 +105,11 @@ gulp.task('scripts', function () {
         .pipe(gulpif(!isBuildTask, sourcemaps.init({
             loadMaps: true
         }))) //[loadMaps: true] must be enabled
-        .pipe(uglify())
+        .pipe(uglify({
+            compress: {
+                drop_console: isBuildTask
+            }
+        }))
         .pipe(rename({
             suffix: '.min'
         }))

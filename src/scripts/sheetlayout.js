@@ -77,8 +77,11 @@ SheetLayout.prototype.initModel = function () {
     let model = this.viewModel;
     let options = this._options;
 
-    new Watcher(model, 'axis', () => {
+    new Watcher(model, 'axis.horizontal', () => {
         model.grid.width = model.axis.horizontal.map(h => h.width).reduce((acc, curr) => acc + curr, 0);
+    });
+
+    new Watcher(model, 'axis.vertical', () => {
         model.grid.height = model.axis.vertical.map(v => v.height).reduce((acc, curr) => acc + curr, 0);
     });
 

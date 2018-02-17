@@ -1,110 +1,94 @@
 import { Depend } from './depend';
-import { isArray, isObject } from './../utilities';
+import { def, hasProto, protoAugment, copyAugment } from './../utilities';
 
-export function Observer(obj) {
-    this.$observe = function (_obj) {
-        if (isArray(_obj)) {
-            this.$observeArray(_obj);
-            _obj.__ob__ = this;
-        } else if (isObject(_obj)) {
-            this.$observeObj(_obj);
-        }
-    };
-
-    this.$observeObj = function (_obj) {
-        for (let prop in _obj) {
-            var val = _obj[prop];
-            defineProperty(_obj, prop, val);
-            if (prop != '__observe__') {
-                this.$observe(val);
+const arrayProto = Array.prototype;
+const arrayMethods = Object.create(arrayProto);
+['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'].forEach(
+    method => {
+        const original = arrayProto[method];
+        def(arrayMethods, method, function () {
+            let ob = this.__ob__;
+            let result = original.apply(this, arguments);
+            let inserted = null;
+            switch (method) {
+                case 'push':
+                case 'unshift':
+                    inserted = Array.from(arguments);
+                    break;
+                case 'splice':
+                    inserted = [].slice.call(arguments, 2);
+                    break;
             }
+            if (inserted) ob._observeArray(inserted);
+            ob.dep.notify(method, arguments);
+            return result;
+        });
+    });
+const arrayKeys = Object.getOwnPropertyNames(arrayMethods);
+
+export function Observer(model) {
+    this.model = model;
+    this.dep = new Depend();
+
+    this._observeArray = function (items) {
+        for (let i = 0, l = items.length; i < l; i++) {
+            observe(items[i]);
         }
     };
 
-    this.$observeArrayItem = function (_array) {
-        for (let i = 0, l = _array.length; i < l; i++) {
-            this.$observeObj(_array[i]);
-        }
-    };
+    def(model, '__ob__', this);
 
-    this.$observeArray = function (_array) {
-        var arrayPrototype = Array.prototype;
-        var newPrototype = Object.create(arrayPrototype);
-        ['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'].forEach(
-            method => {
-                Object.defineProperty(newPrototype, method, {
-                    value: function (newVal) {
-                        var dep = _array.__observe__;
-                        var re = arrayPrototype[method].apply(_array, arguments);
-
-                        let inserted = null;
-                        switch (method) {
-                            case 'push':
-                            case 'unshift':
-                                inserted = Array.from(arguments);
-                                break;
-                            case 'splice':
-                                inserted = [].slice.call(arguments, 2);
-                                break;
-                        }
-                        if (inserted) _array.__ob__.$observeArrayItem(inserted);
-                        dep.notify(method, arguments);
-                        // console.log('arr notify', dep);
-                        return re;
-                    },
-                    enumerable: false,
-                    configurable: true,
-                    writable: true
-                });
-            });
-        _array.__proto__ = newPrototype;
-    };
-
-    this.$observe(obj);
+    if (Array.isArray(model)) {
+        let augment = hasProto ? protoAugment : copyAugment;
+        augment(model, arrayMethods, arrayKeys);
+        this._observeArray(model);
+    } else {
+        walk(model);
+    }
 }
 
-var addObserve = function (val) {
-    if (!val || !isObject(val)) {
+function walk(obj) {
+    Object.keys(obj).forEach(key => {
+        defineReactive(obj, key, obj[key]);
+    });
+}
+
+function observe(value) {
+    if (!value || typeof value !== 'object') {
         return;
     }
-    var dep = new Depend();
-    if (isArray(val)) {
-        val.__observe__ = dep;
-        return dep;
+    let ob;
+    if (value.hasOwnProperty('__ob__') && value.__ob__ instanceof Observer) {
+        ob = value.__ob__;
+    } else {
+        ob = new Observer(value);
     }
-};
+    return ob;
+}
 
-function defineProperty(obj, prop, val) {
-    if (prop == '__observe__') {
-        return;
-    }
-    val = val || obj[prop];
-    var dep = new Depend();
-    obj.__observe__ = dep;
-
-    var childDep = addObserve(val);
-
-    Object.defineProperty(obj, prop, {
+function defineReactive(obj, key, val) {
+    let dep = new Depend();
+    let childOb = observe(val);
+    Object.defineProperty(obj, key, {
+        enumerable: true,
+        configurable: true,
         get: function () {
-            var target = Depend.target;
+            let target = Depend.target;
             if (target) {
                 dep.addSub(target);
-                console.log('dep.addSub', obj, prop, target.expression);
-
-                if (childDep) {
-                    childDep.addSub(target);
-                    console.log('childDep.addSub', obj, prop, target.expression);
+                if (childOb) {
+                    childOb.dep.addSub(target);
                 }
             }
-
             return val;
         },
         set: function (newVal) {
-            if (newVal != val) {
-                val = newVal;
-                dep.notify();
-                // console.log('obj notify', dep);
+            if (val === newVal || (newVal !== newVal && val !== val)) {
+                return;
             }
+            val = newVal;
+            childOb = observe(newVal);
+            dep.notify();
         }
     });
 }

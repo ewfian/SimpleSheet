@@ -2,20 +2,20 @@ import * as _ from './../utilities';
 
 export function Element(tagName, props, children = []) {
     if (!(this instanceof Element)) {
-        if (!_.isArray(children) && children != null) {
-            children = _.slice(arguments, 2).filter(_.truthy);
+        if (!Array.isArray(children) && children != null) {
+            children = [].slice.call(arguments, 2).filter(_.truthy);
         }
         return new Element(tagName, props, children);
     }
 
-    if (!_.isObject(props) && _.isArray(props)) {
+    if (!_.isObject(props) && Array.isArray(props)) {
         children = props;
         props = {};
     }
 
     this.tagName = tagName;
     this.props = props || {};
-    this.children = _.isArray(children) ? children : [].concat(children);
+    this.children = Array.isArray(children) ? children : [].concat(children);
 }
 
 Element.prototype.appendChild = function (child) {

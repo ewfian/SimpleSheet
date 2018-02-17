@@ -1,9 +1,9 @@
 import { Watcher } from './../mvvm';
-import { isArray, isObject, updateObjectByPath, deepCopyBoundProps } from '../utilities';
+import { isObject, updateObjectByPath, deepCopyBoundProps } from '../utilities';
 import { DynamicElement } from './dynamicelement';
 
 export function ElementList(bindModel, parentProps, props, parentTagName = 'div', tagName = 'div') {
-    if (!isArray(bindModel.$value)) {
+    if (!Array.isArray(bindModel.$value)) {
         throw 'InvalidArgumentException';
     }
     this.bindModel = bindModel;

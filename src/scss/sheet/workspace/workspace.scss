@@ -1,28 +1,29 @@
 @import "rulers";
 @import "table_grid";
+
 %workspace {
-    display: flex;
-    background-color: $base-color;
+    display          : flex;
+    background-color : $base-color;
     .page-container {
         // background-color: rgba(255, 174, 0, 0.521);
-        flex-grow: 1;
-        display: flex;
-        flex-wrap: nowrap;
-        flex-direction: column;
-        align-items: flex-start;
-        position: relative;
+        flex-grow      : 1;
+        display        : flex;
+        flex-wrap      : nowrap;
+        flex-direction : column;
+        align-items    : flex-start;
+        position       : relative;
         @extend %rulers;
         .table-content {
             // background-color: rgba(255, 0, 0, 0.445);
-            flex-grow: 1;
-            display: flex;
-            flex-wrap: nowrap;
-            width: 100vw;
-            overflow: hidden;
+            flex-grow : 1;
+            display   : flex;
+            flex-wrap : nowrap;
+            width     : 100vw;
+            overflow  : hidden;
             .table-grid {
                 // background-color: rgb(167, 163, 124);
-                flex-grow: 1;
-                overflow: auto;
+                flex-grow : 1;
+                overflow  : auto;
                 @extend %table-grid;
             }
         }

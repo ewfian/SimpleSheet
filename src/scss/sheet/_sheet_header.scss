@@ -1,17 +1,17 @@
 %sheet-header {
     .title-bar {
-        background-color: $base-color;
-        text-align: center;
-        padding: 2px;
+        background-color : $base-color;
+        text-align       : center;
+        padding          : 2px;
     }
     .menu-bar {
-        min-height: 20px;
+        min-height : 20px;
     }
     .tools-bar {
-        min-height: 60px;
-        background-color: $base-color;
+        min-height       : 60px;
+        background-color : $base-color;
     }
     .formula-bar {
-        min-height: 20px;
+        min-height : 20px;
     }
 }

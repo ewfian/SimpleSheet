@@ -2,6 +2,7 @@
 @import "sheet_header";
 @import "workspace/workspace";
 @import "sheet_footer";
+
 #sheet-container {
     @extend %sheet-base;
     .sheet-header {

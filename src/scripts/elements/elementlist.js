@@ -118,8 +118,8 @@ function parseBind(bindKey, bindValue) {
     }
 }
 
-ElementList.prototype.render = function () {
-    let el = new DynamicElement(this.parentTagName, this.parentProps, this.elements).render();
+ElementList.prototype.render = function (root) {
+    let el = new DynamicElement(this.parentTagName, this.parentProps, this.elements).render(root);
     el._props = this.props;
     el._bindTemplates = this.bindTemplates;
     this.watchers.forEach(w => el._watchers.push(new Watcher(w.model, w.expression, w.update.bind(el))));

@@ -1,5 +1,5 @@
 export function Depend() {
-    this._subs = [];
+    this._subs     = [];
     this.depend_id = (Math.random() + 1).toString(36).substring(2);
 }
 
@@ -21,7 +21,7 @@ Depend.prototype.removeSub = function (callback) {
 };
 
 Depend.prototype.destroy = function () {
-    this._subsQueue = [];
+    this._subs = [];
 };
 
 Depend.target = null;

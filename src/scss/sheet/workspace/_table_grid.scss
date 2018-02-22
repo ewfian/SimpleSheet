@@ -1,28 +1,28 @@
 %table-grid {
-    flex-grow: 1;
-    flex-shrink: 0;
-    position: relative;
-    background-color: $table-grid-cell-bg-color;
+    flex-grow        : 1;
+    flex-shrink      : 0;
+    position         : relative;
+    background-color : $table-grid-cell-bg-color;
     .grid-bg {
-        position: relative;
-        cursor: cell;
+        position : relative;
+        cursor   : cell;
         .h-lines {
-            position: absolute;
+            position : absolute;
             .line {
-                flex-grow: 1;
-                flex-shrink: 0;
-                left: 0;
-                border-bottom: 1px solid $table-grid-cell-border-color;
+                flex-grow     : 1;
+                flex-shrink   : 0;
+                left          : 0;
+                border-bottom : 1px solid $table-grid-cell-border-color;
             }
         }
         .v-lines {
-            position: absolute;
-            display: flex;
+            position : absolute;
+            display  : flex;
             .line {
-                flex-grow: 1;
-                flex-shrink: 0;
-                top: 0;
-                border-right: 1px solid $table-grid-cell-border-color;
+                flex-grow    : 1;
+                flex-shrink  : 0;
+                top          : 0;
+                border-right : 1px solid $table-grid-cell-border-color;
             }
         }
     }

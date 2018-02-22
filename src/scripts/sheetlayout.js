@@ -30,19 +30,22 @@ SheetLayout.prototype.initBind = function () {
     let mvvm = this.mvvm;
     let root = this.root;
 
-    let hRulerCells = new ElementList(mvvm.bindModel('axis.horizontal'), {class: 'ruler-cells'}, {
+    //hRulerCells
+    new ElementList(mvvm.bindModel('axis.horizontal'), {class: 'ruler-cells'}, {
         class      : 'ruler-cell',
         style      : {width: mvvm.bindItem('width')},
         textContent: mvvm.bindItem('text')
     }).render(root.querySelector('.horizontal-ruler'));
 
-    let vRulerCells = new ElementList(mvvm.bindModel('axis.vertical'), {class: 'ruler-cells'}, {
+    //vRulerCells
+    new ElementList(mvvm.bindModel('axis.vertical'), {class: 'ruler-cells'}, {
         class      : 'ruler-cell',
         style      : {height: mvvm.bindItem('height')},
         textContent: mvvm.bindItem('text')
     }).render(root.querySelector('.vertical-ruler'));
 
-    let hTableLines = new ElementList(mvvm.bindModel('axis.vertical'), {
+    //hTableLines
+    new ElementList(mvvm.bindModel('axis.vertical'), {
         class: 'h-lines',
         style: {
             width: mvvm.bindModel('grid.width')
@@ -54,7 +57,8 @@ SheetLayout.prototype.initBind = function () {
         }
     }).render(root.querySelector('.grid-bg'));
 
-    let vTableLines = new ElementList(mvvm.bindModel('axis.horizontal'), {
+    //vTableLines
+    new ElementList(mvvm.bindModel('axis.horizontal'), {
         class: 'v-lines',
         style: {
             height: mvvm.bindModel('grid.height')

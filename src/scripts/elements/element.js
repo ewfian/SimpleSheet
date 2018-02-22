@@ -2,7 +2,7 @@ import * as _ from './../utilities';
 
 export function Element(tagName = 'div', props = {}, children = []) {
     if (!(this instanceof Element)) {
-        if (!Array.isArray(children) && children != null) {
+        if (!Array.isArray(children) && children !== null) {
             children = [].slice.call(arguments, 2).filter(_.truthy);
         }
         return new Element(tagName, props, children);

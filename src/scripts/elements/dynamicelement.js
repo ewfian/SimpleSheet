@@ -19,7 +19,7 @@ export function DynamicElement(tagName, props = {}, children = []) {
         this.watchers.push({
             model     : children.__bind__.model,
             expression: children.$expression,
-            update    : function (newValue, oldValue) {
+            update    : function (newValue) {
                 let value        = typeof newValue === 'undefined' ? '' : newValue;
                 this.textContent = value;
             }

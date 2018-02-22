@@ -85,6 +85,7 @@ function defineReactive(obj, key, val) {
             return val;
         },
         set         : function (newVal) {
+            //[newVal !== newVal && val !== val] to trigger change on NaN->NaN set
             if (val === newVal || (newVal !== newVal && val !== val)) {
                 return;
             }

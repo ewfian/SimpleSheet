@@ -40,7 +40,7 @@ Vector2.prototype.divide = function (v) {
 };
 
 Vector2.prototype.equals = function (v) {
-    return this.x == v.x && this.y == v.y;
+    return this.x === v.x && this.y === v.y;
 };
 
 Vector2.prototype.dot = function (v) {

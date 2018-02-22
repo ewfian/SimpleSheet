@@ -1,16 +1,16 @@
 @mixin opacity($opacity:1) {
     // usage: @include opacity(0.85);
-    opacity: $opacity;
-    $opacity-ie: $opacity * 100;
-    filter: alpha(opacity=$opacity-ie); //IE8
+    opacity : $opacity;
+    $opacity-ie : $opacity * 100;
+    filter  : alpha(opacity=$opacity-ie); //IE8
 }
 
 @mixin vertical-align($align: middle) {
     // usage: @include vertical-align(middle);
     &:before {
-        content: "";
-        display: inline-block;
-        height: 100%;
-        vertical-align: $align;
+        content        : "";
+        display        : inline-block;
+        height         : 100%;
+        vertical-align : $align;
     }
 }

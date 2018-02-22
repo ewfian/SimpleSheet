@@ -1,14 +1,14 @@
 import { Depend } from './depend';
 import { def, hasProto, protoAugment, copyAugment } from './../utilities';
 
-const arrayProto = Array.prototype;
+const arrayProto   = Array.prototype;
 const arrayMethods = Object.create(arrayProto);
 ['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'].forEach(
     method => {
         const original = arrayProto[method];
         def(arrayMethods, method, function () {
-            let ob = this.__ob__;
-            let result = original.apply(this, arguments);
+            let ob       = this.__ob__;
+            let result   = original.apply(this, arguments);
             let inserted = null;
             switch (method) {
                 case 'push':
@@ -19,7 +19,9 @@ const arrayMethods = Object.create(arrayProto);
                     inserted = [].slice.call(arguments, 2);
                     break;
             }
-            if (inserted) ob._observeArray(inserted);
+            if (inserted) {
+                ob._observeArray(inserted);
+            }
             ob.dep.notify(method, arguments);
             return result;
         });
@@ -28,14 +30,14 @@ const arrayKeys = Object.getOwnPropertyNames(arrayMethods);
 
 export function Observer(model) {
     this.model = model;
-    this.dep = new Depend();
+    this.dep   = new Depend();
 
     this._observeArray = function (items) {
         for (let i = 0, l = items.length; i < l; i++) {
             observe(items[i]);
         }
     };
-
+    this.__ob__        = null;
     def(model, '__ob__', this);
 
     if (Array.isArray(model)) {
@@ -67,12 +69,12 @@ function observe(value) {
 }
 
 function defineReactive(obj, key, val) {
-    let dep = new Depend();
+    let dep     = new Depend();
     let childOb = observe(val);
     Object.defineProperty(obj, key, {
-        enumerable: true,
+        enumerable  : true,
         configurable: true,
-        get: function () {
+        get         : function () {
             let target = Depend.target;
             if (target) {
                 dep.addSub(target);
@@ -82,11 +84,11 @@ function defineReactive(obj, key, val) {
             }
             return val;
         },
-        set: function (newVal) {
+        set         : function (newVal) {
             if (val === newVal || (newVal !== newVal && val !== val)) {
                 return;
             }
-            val = newVal;
+            val     = newVal;
             childOb = observe(newVal);
             dep.notify();
         }

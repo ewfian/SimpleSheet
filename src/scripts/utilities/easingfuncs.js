@@ -1,21 +1,21 @@
 export default {
-    easeInQuad: function (t) {
+    easeInQuad    : function (t) {
         return t * t;
     },
     // decelerating to zero velocity
-    easeOutQuad: function (t) {
+    easeOutQuad   : function (t) {
         return t * (2 - t);
     },
     // acceleration until halfway, then deceleration
-    easeInOutQuad: function (t) {
+    easeInOutQuad : function (t) {
         return t < .5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
     },
     // accelerating from zero velocity
-    easeInCubic: function (t) {
+    easeInCubic   : function (t) {
         return t * t * t;
     },
     // decelerating to zero velocity
-    easeOutCubic: function (t) {
+    easeOutCubic  : function (t) {
         return (--t) * t * t + 1;
     },
     // acceleration until halfway, then deceleration
@@ -23,11 +23,11 @@ export default {
         return t < .5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
     },
     // accelerating from zero velocity
-    easeInQuart: function (t) {
+    easeInQuart   : function (t) {
         return t * t * t * t;
     },
     // decelerating to zero velocity
-    easeOutQuart: function (t) {
+    easeOutQuart  : function (t) {
         return 1 - (--t) * t * t * t;
     },
     // acceleration until halfway, then deceleration
@@ -35,11 +35,11 @@ export default {
         return t < .5 ? 8 * t * t * t * t : 1 - 8 * (--t) * t * t * t;
     },
     // accelerating from zero velocity
-    easeInQuint: function (t) {
+    easeInQuint   : function (t) {
         return t * t * t * t * t;
     },
     // decelerating to zero velocity
-    easeOutQuint: function (t) {
+    easeOutQuint  : function (t) {
         return 1 + (--t) * t * t * t * t;
     },
     // acceleration until halfway, then deceleration

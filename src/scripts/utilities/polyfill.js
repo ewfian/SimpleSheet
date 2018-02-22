@@ -2,7 +2,7 @@
 // Reference: http://es5.github.io/#x15.4.4.18
 if (!Array.prototype.forEach) {
 
-    Array.prototype.forEach = function (callback /*, thisArg*/ ) {
+    Array.prototype.forEach = function (callback /*, thisArg*/) {
 
         var T, k;
 
@@ -65,7 +65,7 @@ if (!Array.prototype.forEach) {
 if (typeof Object.assign != 'function') {
     // Must be writable: true, enumerable: false, configurable: true
     Object.defineProperty(Object, 'assign', {
-        value: function assign(target, varArgs) { // .length of function is 2
+        value       : function assign(target, varArgs) { // .length of function is 2
             'use strict';
             if (target == null) { // TypeError if undefined or null
                 throw new TypeError('Cannot convert undefined or null to object');
@@ -87,7 +87,7 @@ if (typeof Object.assign != 'function') {
             }
             return to;
         },
-        writable: true,
+        writable    : true,
         configurable: true
     });
 }
@@ -100,11 +100,12 @@ if (typeof Object.assign != 'function') {
         }
         Object.defineProperty(item, 'remove', {
             configurable: true,
-            enumerable: true,
-            writable: true,
-            value: function remove() {
-                if (this.parentNode !== null)
+            enumerable  : true,
+            writable    : true,
+            value       : function remove() {
+                if (this.parentNode !== null) {
                     this.parentNode.removeChild(this);
+                }
             }
         });
     });
@@ -113,24 +114,28 @@ if (typeof Object.assign != 'function') {
 // Production steps of ECMA-262, Edition 6, 22.1.2.1
 if (!Array.from) {
     Array.from = (function () {
-        var toStr = Object.prototype.toString;
-        var isCallable = function (fn) {
+        var toStr          = Object.prototype.toString;
+        var isCallable     = function (fn) {
             return typeof fn === 'function' || toStr.call(fn) === '[object Function]';
         };
-        var toInteger = function (value) {
+        var toInteger      = function (value) {
             var number = Number(value);
-            if (isNaN(number)) { return 0; }
-            if (number === 0 || !isFinite(number)) { return number; }
+            if (isNaN(number)) {
+                return 0;
+            }
+            if (number === 0 || !isFinite(number)) {
+                return number;
+            }
             return (number > 0 ? 1 : -1) * Math.floor(Math.abs(number));
         };
         var maxSafeInteger = Math.pow(2, 53) - 1;
-        var toLength = function (value) {
+        var toLength       = function (value) {
             var len = toInteger(value);
             return Math.min(Math.max(len, 0), maxSafeInteger);
         };
 
         // The length property of the from method is 1.
-        return function from(arrayLike /*, mapFn, thisArg */ ) {
+        return function from(arrayLike /*, mapFn, thisArg */) {
             // 1. Let C be the this value.
             var C = this;
 

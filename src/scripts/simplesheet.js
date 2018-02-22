@@ -28,10 +28,18 @@ export function SimpleSheet(el) {
         if (Array.from(e.target.classList).indexOf('h-resizer') > -1) {
 
             target = e.target;
+
+            target.style.width = '100px';
+            target.style.right = '-50px';
+
             window.addEventListener('mousemove', moveResizeBar);
 
             window.addEventListener('mouseup',
-                () => window.removeEventListener('mousemove', moveResizeBar),
+                () => {
+                    target.style.width = '';
+                    target.style.right = '';
+                    window.removeEventListener('mousemove', moveResizeBar);
+                },
                 {once: true}
             );
         }

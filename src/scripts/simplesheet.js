@@ -8,43 +8,39 @@ export function SimpleSheet(el) {
     sheetLayout.initBind();
     sheetLayout.initModel();
 
-    // new Watcher(sheetLayout.viewModel, 'axis', (newValue, oldValue) => {
-    //     console.log('axis0', newValue, oldValue);
-    // });
-    //
-    // new Watcher(sheetLayout.viewModel, 'axis', (newValue, oldValue) => {
-    //     console.log('axis1', newValue, oldValue);
-    // });
-    //
-    // new Watcher(sheetLayout.viewModel, 'axis.horizontal', (newValue, oldValue) => {
-    //     console.log('axis.horizontal0', newValue, oldValue);
-    // });
-    //
-    // new Watcher(sheetLayout.viewModel, 'axis.vertical', (newValue, oldValue) => {
-    //     console.log('axis.vertical', newValue, oldValue);
-    // });
-    //
-    // new Watcher(sheetLayout.viewModel, 'grid', (newValue, oldValue) => {
-    //     console.log('grid0', newValue, oldValue);
-    // });
-    // new Watcher(sheetLayout.viewModel, 'grid.width', (newValue, oldValue) => {
-    //     console.log('grid.width', newValue, oldValue);
-    // });
-    //
-    sheetLayout.viewModel.axis.horizontal.shift();
-    sheetLayout.viewModel.axis.horizontal.unshift({
-        width: 200,
-        text : 'A.test'
-    });
 
-    sheetLayout.viewModel.axis.vertical.splice(0, 1, {
-        height: 200,
-        text  : '1.t'
-    });
+    let i = 20, j = 0, delta = 1, flag = false;
+    setInterval(() => {
+        if (j > 30 && !flag) {
+            delta = -1;
+            flag  = true;
+        }
+        if (j < 2 && flag) {
+            delta = 1;
+            flag  = false;
+        }
+        j += delta;
+        i++;
 
-    // sheetLayout.viewModel.axis.vertical[0].width = 25;
+        sheetLayout.viewModel.axis.horizontal.shift();
+        sheetLayout.viewModel.axis.horizontal.unshift({
+            width: 100,
+            text : Math.floor(Math.random() * 100)
+        });
 
-    console.log(sheetLayout.viewModel);
+        sheetLayout.viewModel.axis.vertical.splice(0, 1, {
+            height: 100,
+            text  : Math.floor(Math.random() * 10)
+        });
+
+        sheetLayout.viewModel.axis.horizontal[j].text  = i;
+        sheetLayout.viewModel.axis.horizontal[j].width = i;
+
+        sheetLayout.viewModel.axis.vertical[j].text   = i;
+        sheetLayout.viewModel.axis.vertical[j].height = i;
+        console.log(i, j, delta);
+    }, 1000);
+
 
     tableScrollEvent(root.querySelector('.table-grid'), root.querySelector('.vertical-ruler'), root.querySelector('.horizontal-ruler .ruler-cells'));
 }

@@ -38,36 +38,34 @@ DynamicElement.prototype.render = function (root) {
 };
 
 function parseBind(bindKey, bindValue) {
-    switch (bindKey) {
-        case 'style':
-            for (let st in bindValue) {
-                if (bindValue.hasOwnProperty(st)) {
-                    let styleValue = bindValue[st];
-                    if (styleValue.hasOwnProperty('__bind__')) {
-                        bindValue[st] = styleValue.$value;
-                        this.watchers.push({
-                            model     : styleValue.__bind__.model,
-                            expression: styleValue.$expression,
-                            update    : function (newValue) {
-                                let value      = typeof newValue === 'undefined' ? '' : newValue;
-                                this.style[st] = getPixelValue(st, value);
-                            }
-                        });
-                    }
+    if (bindKey === 'style') {
+        for (let st in bindValue) {
+            if (bindValue.hasOwnProperty(st)) {
+                let styleValue = bindValue[st];
+                if (styleValue.hasOwnProperty('__bind__')) {
+                    bindValue[st] = styleValue.$value;
+                    this.watchers.push({
+                        model     : styleValue.__bind__.model,
+                        expression: styleValue.$expression,
+                        update    : function (newValue) {
+                            let value      = typeof newValue === 'undefined' ? '' : newValue;
+                            this.style[st] = getPixelValue(st, value);
+                        }
+                    });
                 }
             }
-            break;
-        default:
-            if (bindValue.hasOwnProperty('__bind__')) {
-                this.props[bindKey] = bindValue.$value;
-                this.watchers.push({
-                    model     : bindValue.__bind__.model,
-                    expression: bindValue.$expression,
-                    update    : function (newValue) {
-                        let value = typeof newValue === 'undefined' ? '' : newValue;
-                        setAttr(this, bindKey, value);
-                    }
-                });
-            }
+        }
+    } else {
+        if (bindValue.hasOwnProperty('__bind__')) {
+            this.props[bindKey] = bindValue.$value;
+            this.watchers.push({
+                model     : bindValue.__bind__.model,
+                expression: bindValue.$expression,
+                update    : function (newValue) {
+                    let value = typeof newValue === 'undefined' ? '' : newValue;
+                    setAttr(this, bindKey, value);
+                }
+            });
+        }
     }
 }

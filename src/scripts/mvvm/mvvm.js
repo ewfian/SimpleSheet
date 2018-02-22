@@ -8,7 +8,7 @@ export function Mvvm(model) {
 
 Mvvm.prototype.bindModel = function (expression, model) {
     let _model = model || this.model;
-    let value  = parseExpression(expression)(this.model);
+    let value  = parseExpression(expression)(_model);
     return {
         '__bind__'   : {
             model: _model,

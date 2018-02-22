@@ -1,6 +1,7 @@
 import { Watcher } from './../mvvm';
 import { isObject, updateObjectByPath, deepCopyBoundProps } from '../utilities';
 import { DynamicElement } from './dynamicelement';
+import { Mvvm } from '../mvvm';
 
 export function ElementList(bindModel, parentProps, props, parentTagName = 'div', tagName = 'div') {
     if (!Array.isArray(bindModel.$value)) {
@@ -28,7 +29,7 @@ export function ElementList(bindModel, parentProps, props, parentTagName = 'div'
     bindModel.$value.forEach(model => {
         let boundProps = deepCopyBoundProps(props);
         this.bindTemplates.forEach(
-            temp => updateObjectByPath(boundProps, model[temp.key], temp.path)
+            temp => updateObjectByPath(boundProps, Mvvm.prototype.bindModel(temp.key, model), temp.path)
         );
         this.elements.push(new DynamicElement(tagName, boundProps));
     });
@@ -46,7 +47,9 @@ function generateUpdateFunction() {
 
         if (['push', 'unshift'].indexOf(op) > -1 && args.length > 0) {
             this._bindTemplates.forEach(
-                temp => updateObjectByPath(this._props, args[0][temp.key], temp.path)
+                temp => {
+                    updateObjectByPath(this._props, Mvvm.prototype.bindModel(temp.key, args[0]), temp.path);
+                }
             );
             insertNode = new DynamicElement(this.tagName, this._props).render();
         }
@@ -81,7 +84,7 @@ function generateUpdateFunction() {
                 var nodeList = Array.prototype.slice.call(this.children).map(x => this.removeChild(x));
                 nodeList.splice(...[].slice.call(args, 0, 2), ...[].slice.call(args, 2).map(e => {
                     this._bindTemplates.forEach(
-                        temp => updateObjectByPath(this._props, e[temp.key], temp.path)
+                        temp => updateObjectByPath(this._props, Mvvm.prototype.bindModel(temp.key, e), temp.path)
                     );
                     return new DynamicElement(this.tagName, this._props).render();
                 }));

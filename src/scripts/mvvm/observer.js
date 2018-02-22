@@ -1,5 +1,5 @@
 import { Depend } from './depend';
-import { def, hasProto, protoAugment, copyAugment } from './../utilities';
+import { def, augment } from './../utilities';
 
 const arrayProto   = Array.prototype;
 const arrayMethods = Object.create(arrayProto);
@@ -41,7 +41,6 @@ export function Observer(model) {
     def(model, '__ob__', this);
 
     if (Array.isArray(model)) {
-        let augment = hasProto ? protoAugment : copyAugment;
         augment(model, arrayMethods, arrayKeys);
         this._observeArray(model);
     } else {

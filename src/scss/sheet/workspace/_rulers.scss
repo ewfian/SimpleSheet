@@ -1,7 +1,7 @@
 %rulers {
     .ruler-cell {
         color             : $ruler-font-color;
-        padding           : 2px;
+        padding           : 2px 0;
         font-size         : 12px;
         line-height       : 100%;
         text-align        : center;
@@ -12,6 +12,7 @@
         &:hover {
             background-color : $ruler-border-hover-color;
         }
+        //pointer-events: none;
         @include vertical-align();
     }
     .ruler-cell-selected {
@@ -69,7 +70,7 @@
                 border-right  : 1px solid;
                 border-bottom : 1px solid;
                 border-image  : linear-gradient(180deg, $base-color 10%, $ruler-border-color) 5;
-                &:after {
+                .h-resizer {
                     // horizontal resizer
                     // background-color: rgba(255, 0, 0, 0.267);
                     content  : "";
@@ -113,7 +114,7 @@
                 border-right  : 1px solid;
                 border-bottom : 1px solid;
                 border-image  : linear-gradient(90deg, $base-color 10%, $ruler-border-color) 5;
-                &:after {
+                .v-resizer {
                     // vertical resize
                     // background-color: rgba(255, 0, 0, 0.267);
                     content  : "";

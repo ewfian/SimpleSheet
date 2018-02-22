@@ -1,5 +1,6 @@
 import { default as tableScrollEvent } from './events/tablescrollevents';
 import { SheetLayout } from './sheetlayout';
+import { setAttr } from './utilities';
 
 export function SimpleSheet(el) {
     let root = this.container = document.querySelector(el);
@@ -9,38 +10,32 @@ export function SimpleSheet(el) {
     sheetLayout.initModel();
 
 
-    let i = 20, j = 0, delta = 1, flag = false;
-    setInterval(() => {
-        if (j > 30 && !flag) {
-            delta = -1;
-            flag  = true;
+    document.addEventListener('contextmenu', function (e) {
+        e.preventDefault();
+    }, false);
+
+    let target        = null;
+    let moveResizeBar = e => {
+        this.target = target;
+        let parent  = target.parentElement;
+        let width   = e.clientX - parent.getBoundingClientRect().left;
+
+        if (width > 0) {
+            setAttr(parent, 'style', {width: width});
         }
-        if (j < 2 && flag) {
-            delta = 1;
-            flag  = false;
+    };
+    root.querySelector('.workspace').addEventListener('mousedown', e => {
+        if (Array.from(e.target.classList).indexOf('h-resizer') > -1) {
+
+            target = e.target;
+            window.addEventListener('mousemove', moveResizeBar);
+
+            window.addEventListener('mouseup',
+                () => window.removeEventListener('mousemove', moveResizeBar),
+                {once: true}
+            );
         }
-        j += delta;
-        i++;
-
-        sheetLayout.viewModel.axis.horizontal.shift();
-        sheetLayout.viewModel.axis.horizontal.unshift({
-            width: 100,
-            text : Math.floor(Math.random() * 100)
-        });
-
-        sheetLayout.viewModel.axis.vertical.splice(0, 1, {
-            height: 100,
-            text  : Math.floor(Math.random() * 10)
-        });
-
-        sheetLayout.viewModel.axis.horizontal[j].text  = i;
-        sheetLayout.viewModel.axis.horizontal[j].width = i;
-
-        sheetLayout.viewModel.axis.vertical[j].text   = i;
-        sheetLayout.viewModel.axis.vertical[j].height = i;
-        console.log(i, j, delta);
-    }, 1000);
-
+    });
 
     tableScrollEvent(root.querySelector('.table-grid'), root.querySelector('.vertical-ruler'), root.querySelector('.horizontal-ruler .ruler-cells'));
 }

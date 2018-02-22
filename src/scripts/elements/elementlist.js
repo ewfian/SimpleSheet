@@ -3,15 +3,16 @@ import { isObject, updateObjectByPath, deepCopyBoundProps } from '../utilities';
 import { DynamicElement } from './dynamicelement';
 import { Mvvm } from '../mvvm';
 
-export function ElementList(bindModel, parentProps, props, parentTagName = 'div', tagName = 'div') {
+export function ElementList(bindModel, parentProps, props, childrensChildren, parentTagName = 'div', tagName = 'div') {
     if (!Array.isArray(bindModel.$value)) {
         throw 'InvalidArgumentException';
     }
-    this.bindModel     = bindModel;
-    this.parentProps   = parentProps;
-    this.props         = props;
-    this.parentTagName = parentTagName;
-    this.tagName       = tagName;
+    this.bindModel         = bindModel;
+    this.parentProps       = parentProps;
+    this.props             = props;
+    this.parentTagName     = parentTagName;
+    this.tagName           = tagName;
+    this.childrensChildren = childrensChildren;
 
     this.bindTemplates = [];
     this.elements      = [];
@@ -31,7 +32,7 @@ export function ElementList(bindModel, parentProps, props, parentTagName = 'div'
         this.bindTemplates.forEach(
             temp => updateObjectByPath(boundProps, Mvvm.prototype.bindModel(temp.key, model), temp.path)
         );
-        this.elements.push(new DynamicElement(tagName, boundProps));
+        this.elements.push(new DynamicElement(tagName, boundProps, childrensChildren));
     });
 
     this.watchers.push({
@@ -51,7 +52,7 @@ function generateUpdateFunction() {
                     updateObjectByPath(this._props, Mvvm.prototype.bindModel(temp.key, args[0]), temp.path);
                 }
             );
-            insertNode = new DynamicElement(this.tagName, this._props).render();
+            insertNode = new DynamicElement(this.tagName, this._props, this._childrensChildren).render();
         }
         switch (op) {
             case 'push':
@@ -86,7 +87,7 @@ function generateUpdateFunction() {
                     this._bindTemplates.forEach(
                         temp => updateObjectByPath(this._props, Mvvm.prototype.bindModel(temp.key, e), temp.path)
                     );
-                    return new DynamicElement(this.tagName, this._props).render();
+                    return new DynamicElement(this.tagName, this._props, this._childrensChildren).render();
                 }));
                 nodeList.forEach(x => this.appendChild(x));
                 break;
@@ -100,8 +101,7 @@ function generateUpdateFunction() {
             default:
                 throw 'NotImplementedException';
         }
-    }
-
+    };
 }
 
 function parseBind(bindKey, bindValue) {
@@ -127,9 +127,10 @@ function parseBind(bindKey, bindValue) {
 }
 
 ElementList.prototype.render = function (root) {
-    let el            = new DynamicElement(this.parentTagName, this.parentProps, this.elements).render(root);
-    el._props         = this.props;
-    el._bindTemplates = this.bindTemplates;
+    let el                = new DynamicElement(this.parentTagName, this.parentProps, this.elements).render(root);
+    el._props             = this.props;
+    el._bindTemplates     = this.bindTemplates;
+    el._childrensChildren = this.childrensChildren;
     this.watchers.forEach(w => el._watchers.push(new Watcher(w.model, w.expression, w.update.bind(el))));
     return el;
 };

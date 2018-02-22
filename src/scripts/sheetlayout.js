@@ -1,5 +1,5 @@
 import { generateRulerText, runNTimes } from './utilities';
-import { ElementList } from './elements';
+import { Element, ElementList } from './elements';
 import { Mvvm } from './mvvm';
 import { Watcher } from './mvvm/watcher';
 
@@ -12,11 +12,11 @@ export function SheetLayout(root, rows = 96, columns = 103, rowHeight = 18, colu
     };
 
     this.viewModel = {
-        axis: {
+        axis : {
             horizontal: [],
             vertical  : []
         },
-        grid: {
+        _grid: {
             width : 0,
             height: 0
         }
@@ -35,20 +35,20 @@ SheetLayout.prototype.initBind = function () {
         class      : 'ruler-cell',
         style      : {width: mvvm.bindItem('width')},
         textContent: mvvm.bindItem('text')
-    }).render(root.querySelector('.horizontal-ruler'));
+    }, new Element({class: 'h-resizer'})).render(root.querySelector('.horizontal-ruler'));
 
     //vRulerCells
     new ElementList(mvvm.bindModel('axis.vertical'), {class: 'ruler-cells'}, {
         class      : 'ruler-cell',
         style      : {height: mvvm.bindItem('height')},
         textContent: mvvm.bindItem('text')
-    }).render(root.querySelector('.vertical-ruler'));
+    }, new Element({class: 'v-resizer'})).render(root.querySelector('.vertical-ruler'));
 
     //hTableLines
     new ElementList(mvvm.bindModel('axis.vertical'), {
         class: 'h-lines',
         style: {
-            width: mvvm.bindModel('grid.width')
+            width: mvvm.bindModel('_grid.width')
         }
     }, {
         class: 'line',
@@ -61,7 +61,7 @@ SheetLayout.prototype.initBind = function () {
     new ElementList(mvvm.bindModel('axis.horizontal'), {
         class: 'v-lines',
         style: {
-            height: mvvm.bindModel('grid.height')
+            height: mvvm.bindModel('_grid.height')
         }
     }, {
         class: 'line',
@@ -76,11 +76,11 @@ SheetLayout.prototype.initModel = function () {
     let options = this._options;
 
     new Watcher(model, 'axis.horizontal', () => {
-        model.grid.width = model.axis.horizontal.map(h => h.width).reduce((acc, curr) => acc + curr, 0);
+        model._grid.width = model.axis.horizontal.map(h => h.width).reduce((acc, curr) => acc + curr, 0);
     });
 
     new Watcher(model, 'axis.vertical', () => {
-        model.grid.height = model.axis.vertical.map(v => v.height).reduce((acc, curr) => acc + curr, 0);
+        model._grid.height = model.axis.vertical.map(v => v.height).reduce((acc, curr) => acc + curr, 0);
     });
 
     runNTimes(options.columns, (i) => {

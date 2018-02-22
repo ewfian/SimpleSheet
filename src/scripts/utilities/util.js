@@ -120,8 +120,7 @@ let def = (obj, key, val, enumerable) => {
 };
 
 // can we use __proto__?
-let hasProto = '__proto__' in {};
-
+let hasProto     = '__proto__' in {};
 /**
  * Augment an target Object or Array by intercepting
  * the prototype chain using __proto__
@@ -129,17 +128,17 @@ let hasProto = '__proto__' in {};
 let protoAugment = (target, src) => {
     target.__proto__ = src;
 };
-
 /**
  * Augment an target Object or Array by defining
  * hidden properties.
  */
-let copyAugment = (target, src, keys) => {
+let copyAugment  = (target, src, keys) => {
     for (let i = 0, l = keys.length; i < l; i++) {
         let key = keys[i];
         def(target, key, src[key]);
     }
 };
+let augment      = hasProto ? protoAugment : copyAugment;
 
 export {
     truthy,
@@ -155,7 +154,5 @@ export {
     deepCopyBoundProps,
     runNTimes,
     def,
-    hasProto,
-    protoAugment,
-    copyAugment
+    augment
 };

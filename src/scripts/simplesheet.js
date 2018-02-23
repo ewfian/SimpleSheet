@@ -20,11 +20,13 @@ export function SimpleSheet(el) {
         this.target = target;
         let parent  = target.parentElement;
         width       = e.clientX - parent.getBoundingClientRect().left;
-
-        if (width > 0) {
-            setAttr(parent, 'style', {width: width});
-            root.querySelector('.resizeline-col').style.left = width + 'px';
+        if (width < 0) {
+            width = 0;
         }
+
+        setAttr(parent, 'style', {width: width});
+        root.querySelector('.resizeline-col').style.left =
+            (width + parent.getBoundingClientRect().left - parent.parentElement.getBoundingClientRect().left) + 'px';
     };
     root.querySelector('.workspace').addEventListener('mousedown', e => {
         if (Array.from(e.target.classList).indexOf('h-resizer') > -1) {

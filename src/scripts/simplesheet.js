@@ -15,29 +15,32 @@ export function SimpleSheet(el) {
     }, false);
 
     let target        = null;
+    let width         = 0;
     let moveResizeBar = e => {
         this.target = target;
         let parent  = target.parentElement;
-        let width   = e.clientX - parent.getBoundingClientRect().left;
+        width       = e.clientX - parent.getBoundingClientRect().left;
 
         if (width > 0) {
             setAttr(parent, 'style', {width: width});
+            root.querySelector('.resizeline-col').style.left = width + 'px';
         }
     };
     root.querySelector('.workspace').addEventListener('mousedown', e => {
         if (Array.from(e.target.classList).indexOf('h-resizer') > -1) {
 
-            target = e.target;
+            target    = e.target;
+            let index = Array.prototype.slice.call(target.parentElement.parentElement.children).indexOf(target.parentElement);
 
-            target.style.width = '100px';
-            target.style.right = '-50px';
+            target.classList.add('resizing');
 
             window.addEventListener('mousemove', moveResizeBar);
 
             window.addEventListener('mouseup',
                 () => {
-                    target.style.width = '';
-                    target.style.right = '';
+                    sheetLayout.viewModel.axis.horizontal[index].width = width;
+                    target.classList.remove('resizing');
+                    root.querySelector('.resizeline-col').style.left = 0;
                     window.removeEventListener('mousemove', moveResizeBar);
                 },
                 {once: true}

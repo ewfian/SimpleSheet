@@ -12,8 +12,13 @@
         &:hover {
             background-color : $ruler-border-hover-color;
         }
-        //pointer-events: none;
         @include vertical-align();
+        .resizing {
+            width  : 100px !important;
+            height : 30px !important;
+            right  : -50px !important;
+            bottom : -15px !important;
+        }
     }
     .ruler-cell-selected {
         color            : $ruler-selected-color;
@@ -132,4 +137,23 @@
             }
         }
     }
+    .resizeline-col {
+        //display  : none;
+        //left        : 72px;
+        width       : 100px;
+        height      : 100%;
+        position    : absolute;
+        margin-left : -50px;
+        cursor      : col-resize;
+        z-index     : 1;
+        &:after {
+            content     : "";
+            position    : absolute;
+            left        : 49px;
+            width       : 1px;
+            height      : 100%;
+            border-left : 1px dashed #666666;
+        }
+    }
+
 }

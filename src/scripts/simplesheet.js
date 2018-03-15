@@ -16,23 +16,29 @@ export function SimpleSheet(el) {
 
     let target        = null;
     let width         = 0;
+    let index         = 0;
     let moveResizeBar = e => {
         this.target = target;
         let parent  = target.parentElement;
         width       = e.clientX - parent.getBoundingClientRect().left;
-
-        if (width > 0) {
-            setAttr(parent, 'style', {width: width});
-            root.querySelector('.resizeline-col').style.left = width + 'px';
+        if (width < 0) {
+            width = 0;
         }
+
+        setAttr(parent, 'style', {width: width});
+        root.querySelector('.resizer-tooltip').textContent = `Width: ${width} pixels`;
+        root.querySelector('.resizer-line').style.left =
+            (width + parent.getBoundingClientRect().left - parent.parentElement.getBoundingClientRect().left) + 'px';
     };
     root.querySelector('.workspace').addEventListener('mousedown', e => {
         if (Array.from(e.target.classList).indexOf('h-resizer') > -1) {
 
             target    = e.target;
-            let index = Array.prototype.slice.call(target.parentElement.parentElement.children).indexOf(target.parentElement);
+            index = Array.prototype.slice.call(target.parentElement.parentElement.children).indexOf(target.parentElement);
 
             target.classList.add('resizing');
+            root.querySelector('.resizer-tooltip').style.left = target.parentElement.getBoundingClientRect().left - target.parentElement.parentElement.getBoundingClientRect().left + 'px';
+            root.querySelector('.resizer-tooltip').style.display = 'block';
 
             window.addEventListener('mousemove', moveResizeBar);
 
@@ -40,7 +46,8 @@ export function SimpleSheet(el) {
                 () => {
                     sheetLayout.viewModel.axis.horizontal[index].width = width;
                     target.classList.remove('resizing');
-                    root.querySelector('.resizeline-col').style.left = 0;
+                    root.querySelector('.resizer-tooltip').style.display = 'none';
+                    root.querySelector('.resizer-line').style.left = 0;
                     window.removeEventListener('mousemove', moveResizeBar);
                 },
                 {once: true}

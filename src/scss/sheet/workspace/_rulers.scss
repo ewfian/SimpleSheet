@@ -137,7 +137,7 @@
             }
         }
     }
-    .resizeline-col {
+    .resizer-line {
         //display  : none;
         //left        : 72px;
         width       : 100px;
@@ -155,5 +155,16 @@
             border-left : 1px dashed #666666;
         }
     }
-
+    .resizer-tooltip {
+        display: none;
+        z-index: 2;
+        position: absolute;
+        top: 1px;
+        padding: 1px 4px;
+        color: #217346;
+        background: #FFFFFF;
+        border: 1px solid #BEBEBE;
+        box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+        border-radius: 2px;
+    }
 }
